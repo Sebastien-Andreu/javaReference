@@ -1,0 +1,39 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="root" prefHeight="350.0" prefWidth="600.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <AnchorPane layoutX="19.0" layoutY="35.0" prefHeight="47.0" prefWidth="562.0" style="-fx-border-color: lightgrey; -fx-border-width: 1px 1px 1px 1px;">
+         <children>
+            <ImageView fitHeight="45.0" fitWidth="562.0" onDragDropped="#handleDrop" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="showIcon" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="9.0" onDragDropped="#handleDrop" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="showTitle" layoutX="50.0" layoutY="13.0" onDragDropped="#handleDrop" onDragOver="#handleDragOver" prefHeight="17.0" prefWidth="496.0" />
+         </children>
+      </AnchorPane>
+      <Label alignment="CENTER" layoutX="19.0" layoutY="14.0" prefHeight="17.0" prefWidth="562.0" text="Drag and drop your file in the field below :" />
+      <AnchorPane layoutX="19.0" layoutY="93.0" prefHeight="245.0" prefWidth="562.0">
+         <children>
+            <AnchorPane prefHeight="247.0" prefWidth="260.0" style="-fx-border-color: lightgrey; -fx-border-width: 1px 1px 1px 1px;">
+               <children>
+                  <Label layoutX="9.0" layoutY="15.0" prefHeight="17.0" prefWidth="79.0" text="Search terms :" />
+                  <TextField fx:id="inputTags" layoutX="88.0" layoutY="11.0" onKeyPressed="#onEnterKeyPressTags" prefHeight="25.0" prefWidth="158.0" />
+                  <FlowPane fx:id="showTags" cache="true" hgap="5.0" layoutX="5.0" layoutY="45.0" prefHeight="196.0" prefWidth="250.0" rowValignment="TOP" vgap="5.0" />
+               </children>
+            </AnchorPane>
+            <AnchorPane layoutX="259.0" prefHeight="245.0" prefWidth="303.0">
+               <children>
+                  <Label layoutX="14.0" layoutY="17.0" prefHeight="17.0" prefWidth="53.0" text="Title :" />
+                  <TextField layoutX="67.0" layoutY="11.0" prefHeight="25.0" prefWidth="228.0" />
+                  <Label layoutX="15.0" layoutY="50.0" prefHeight="17.0" prefWidth="60.0" text="Author :" />
+                  <TextField layoutX="67.0" layoutY="46.0" prefHeight="25.0" prefWidth="228.0" />
+                  <Label layoutX="15.0" layoutY="83.0" prefHeight="17.0" prefWidth="45.0" text="Theme :" />
+                  <TextField layoutX="67.0" layoutY="81.0" prefHeight="25.0" prefWidth="228.0" />
+               </children>
+            </AnchorPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
