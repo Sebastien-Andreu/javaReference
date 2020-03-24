@@ -21,6 +21,9 @@ import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
 import java.awt.image.BufferedImage;
 import java.io.File;
+import java.io.IOException;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.sql.*;
 import java.util.List;
 import java.util.stream.Collectors;
@@ -75,11 +78,10 @@ public class Controller {
     public static ObservableList<String> tags = FXCollections.observableArrayList();
     public static ObservableList<String> notes = FXCollections.observableArrayList();
     public static ObservableList<String> quotes = FXCollections.observableArrayList();
+    public List<File> files;
+    public String directoryDestination = System.getProperty("user.home") + "\\Documents\\biblio";
     public String extensionOfFile;
     public int IDFile = 0;
-
-    public Controller() throws SQLException {
-    }
 
 
     @FXML
@@ -100,7 +102,7 @@ public class Controller {
 
     @FXML
     private void handleDrop(DragEvent e){
-        List<File> files = e.getDragboard().getFiles();
+        files = e.getDragboard().getFiles();
         extensionOfFile = files.get(0).getName().substring( files.get(0).getName().lastIndexOf(".") + 1);
         Icon icon = FileSystemView.getFileSystemView().getSystemIcon(files.get(0));
 
@@ -140,6 +142,17 @@ public class Controller {
 
     @FXML
     private void saveData(){
+        File directory = new File(directoryDestination);
+        if (!directory.exists()){
+            directory.mkdir();
+        }
+        try {
+            Files.copy(Paths.get(files.get(0).getAbsolutePath()), Paths.get((directoryDestination + "\\" + titleOfImportFile.getText())));
+            Files.delete(Paths.get(files.get(0).getAbsolutePath()));
+        } catch (IOException ex) {
+            ex.printStackTrace();
+        }
+
         saveFile();
         saveKeyWord();
         saveNote();
@@ -170,6 +183,14 @@ public class Controller {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        showIcon.setImage(null);
+        titleOfImportFile.setText("");
+        title.setText("");
+        author.setText("");
+        date.setValue(null);
+        theme.setText("");
+        typeOfDocument.setText("");
     }
 
     private void saveKeyWord(){
@@ -181,6 +202,8 @@ public class Controller {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        tags.clear();
     }
 
     private void saveNote(){
@@ -192,6 +215,8 @@ public class Controller {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        notes.clear();
     }
 
     private void saveQuote(){
@@ -203,6 +228,8 @@ public class Controller {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
+
+        quotes.clear();
     }
 
     private void eventListenerTags(ListChangeListener.Change<? extends String> change){

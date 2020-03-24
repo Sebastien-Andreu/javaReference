@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane fx:id="root" prefHeight="550.0" prefWidth="870.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="sample.Controller">
+   <children>
+      <AnchorPane prefHeight="549.0" prefWidth="430.0">
+         <children>
+            <ScrollPane layoutX="7.0" layoutY="5.0" prefHeight="537.0" prefWidth="423.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+               <content>
+                     <VBox fx:id="showFile" onDragDropped="#handleDroppedRemove" onDragOver="#handleDragOverRemove" prefHeight="526.0" prefWidth="418.0" style="-fx-padding: 5 5 5 5;" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="435.0" prefHeight="550.0" prefWidth="430.0">
+         <children>
+            <ScrollPane layoutY="5.0" prefHeight="218.0" prefWidth="430.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+               <content>
+                  <VBox fx:id="showExtractFile" onDragDropped="#handleDropped" onDragOver="#handleDragOver" prefHeight="203.0" prefWidth="423.0" style="-fx-padding: 5 5 5 5;" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+   </children>
+</AnchorPane>
