@@ -126,10 +126,10 @@ public class Controller {
     private FlowPane showAddTags;
 
     @FXML
-    private FlowPane showAddNotes;
+    public FlowPane showAddNotes;
 
     @FXML
-    private FlowPane showAddQuotes;
+    public FlowPane showAddQuotes;
 
     @FXML
     public TextField titleAdd;
@@ -145,6 +145,16 @@ public class Controller {
 
     @FXML
     public TextField typeOfDocumentAdd;
+
+    @FXML
+    Button buttonAddFile;
+
+    @FXML
+    public
+    Button buttonUpdateFile;
+
+    @FXML
+    Label labelAddFile;
 
     public List<File> files;
     public List<File> listOfFileExtract = new ArrayList<>();
@@ -333,8 +343,6 @@ public class Controller {
     private boolean droppedIsPossible(String name){
         boolean alreadyExist = true;
         for (String s : stringFileExtract){
-            System.out.println(s);
-            System.out.println(name);
             if (s.equals(name)) {
                 alreadyExist = false;
                 break;
@@ -383,10 +391,6 @@ public class Controller {
         setupListOfFile();
     }
 
-
-
-
-
     public void onButtonAddFileClicked(ActionEvent actionEvent) {
         rootView.setVisible(false);
         addTags.clear();
@@ -399,6 +403,9 @@ public class Controller {
         dateAdd.setValue(null);
         themeAdd.setText("");
         typeOfDocumentAdd.setText("");
+        buttonAddFile.setVisible(true);
+        buttonUpdateFile.setVisible(false);
+        labelAddFile.setVisible(true);
         rootAdd.setVisible(true);
         Platform.runLater( () -> rootAdd.requestFocus() );
     }
@@ -479,8 +486,10 @@ public class Controller {
 
     @FXML
     private void handleDragOverAdd(DragEvent e){
-        if (e.getDragboard().hasFiles()){
-            e.acceptTransferModes(TransferMode.ANY);
+        if (!SingletonController.getInstance().getController().buttonUpdateFile.isVisible()){
+            if (e.getDragboard().hasFiles()){
+                e.acceptTransferModes(TransferMode.ANY);
+            }
         }
     }
 
@@ -503,7 +512,6 @@ public class Controller {
     private void onEnterKeyPressTags(KeyEvent e){
         if (e.getCode() == KeyCode.ENTER && !inputAddTags.getText().isEmpty() && !addTags.contains(inputAddTags.getText())){
             addTags.add(inputAddTags.getText());
-            System.out.println(tags);
             inputAddTags.clear();
         }
     }
@@ -537,6 +545,19 @@ public class Controller {
     }
 
     public void onCancelAddClicked(ActionEvent actionEvent) {
+        rootAdd.setVisible(false);
+        stringFile.clear();
+        pictureFile.clear();
+
+        getFile();
+
+        rootView.setVisible(true);
+        Platform.runLater( () -> rootView.requestFocus() );
+    }
+
+    public void onUserWantToUpdateFile(ActionEvent actionEvent) {
+        SingletonDatabase.getInstance().saveFile();
+        SingletonDatabase.getInstance().showDetailsOfFile(SingletonController.getInstance().getController().titleOfImportFileAdd.getText());
         rootAdd.setVisible(false);
         stringFile.clear();
         pictureFile.clear();

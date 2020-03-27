@@ -1,5 +1,7 @@
 package code;
 
+import javafx.application.Platform;
+import javafx.event.ActionEvent;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
@@ -21,6 +23,7 @@ import java.io.ByteArrayOutputStream;
 import java.io.IOException;
 import java.io.ObjectOutputStream;
 import java.io.Serializable;
+import java.time.LocalDate;
 import java.util.Base64;
 
 public class File implements Serializable{
@@ -29,7 +32,6 @@ public class File implements Serializable{
     private Image image;
     private int id;
     private FlowPane flowPane;
-    private double widthMinSize = 268;
 
     public File(String name, Image image, int id){
         this.name = name;
@@ -84,6 +86,7 @@ public class File implements Serializable{
     }
 
     private void showView(){
+        double widthMinSize = 268;
         SingletonController.getInstance().getController().anchorPaneFile.setMinWidth(widthMinSize);
         SingletonController.getInstance().getController().scrollShowFile.setMinWidth(widthMinSize);
         SingletonController.getInstance().getController().showFile.setMinWidth(widthMinSize - 6);
@@ -95,6 +98,32 @@ public class File implements Serializable{
 
         SingletonController.getInstance().getController().anchorPaneDetails.setVisible(true);
         SingletonController.getInstance().getController().modifyDetails.setVisible(true);
+
+        SingletonController.getInstance().getController().modifyDetails.setOnAction(e -> {
+            SingletonController.getInstance().getController().rootView.setVisible(false);
+            SingletonController.getInstance().getController().rootAdd.setVisible(true);
+            SingletonController.getInstance().getController().buttonAddFile.setVisible(false);
+            SingletonController.getInstance().getController().buttonUpdateFile.setVisible(true);
+            SingletonController.getInstance().getController().labelAddFile.setVisible(false);
+
+            SingletonController.getInstance().getController().addTags.clear();
+            SingletonController.getInstance().getController().addQuotes.clear();
+            SingletonController.getInstance().getController().addNotes.clear();
+
+            for (String str : SingletonController.getInstance().getController().tags) {
+                SingletonController.getInstance().getController().addTags.add(str);
+            }
+            SingletonController.getInstance().getController().addQuotes.addAll(SingletonController.getInstance().getController().quotes);
+            SingletonController.getInstance().getController().addNotes.addAll(SingletonController.getInstance().getController().notes);
+            SingletonController.getInstance().getController().showIcon.setImage(this.image);
+            SingletonController.getInstance().getController().titleOfImportFileAdd.setText(this.name);
+            SingletonController.getInstance().getController().titleAdd.setText(SingletonController.getInstance().getController().detailsTitle.getText());
+            SingletonController.getInstance().getController().authorAdd.setText(SingletonController.getInstance().getController().detailsAuthor.getText());
+            SingletonController.getInstance().getController().dateAdd.setValue(LocalDate.parse(SingletonController.getInstance().getController().detailsDate.getText()));
+            SingletonController.getInstance().getController().themeAdd.setText(SingletonController.getInstance().getController().detailsTheme.getText());
+            SingletonController.getInstance().getController().typeOfDocumentAdd.setText(SingletonController.getInstance().getController().detailsTypeOfDocument.getText());
+            Platform.runLater( () -> SingletonController.getInstance().getController().rootAdd.requestFocus() );
+        });
     }
 
     public FlowPane getFlowPane(){

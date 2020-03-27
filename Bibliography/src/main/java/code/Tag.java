@@ -9,6 +9,7 @@ import javafx.scene.image.ImageView;
 import javafx.scene.input.MouseButton;
 import javafx.scene.layout.FlowPane;
 import singleton.SingletonController;
+import singleton.SingletonDatabase;
 
 
 class TagNote extends FlowPane{
@@ -22,11 +23,12 @@ class TagNote extends FlowPane{
         result.setMinWidth(getMinWidth());
         result.setStyle("-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent lightgrey transparent;");
 
-        result.setMinWidth(652);
+        result.setMinWidth(SingletonController.getInstance().getController().showAddNotes.getPrefWidth());
+
         result.setOnMouseClicked(event -> {
             if(event.getButton().equals(MouseButton.PRIMARY)) {
                 if (event.getClickCount() == 2) {
-                    SingletonController.getInstance().getController().notes.remove(tag);
+                    SingletonController.getInstance().getController().addNotes.remove(tag);
                 }
             }
         });
@@ -45,12 +47,12 @@ class TagQuote extends FlowPane{
         result.setContentDisplay(ContentDisplay.RIGHT);
 
         setStyle("-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent lightgrey transparent;");
-        result.setMinWidth(652);
+        result.setMinWidth(SingletonController.getInstance().getController().showAddQuotes.getPrefWidth());
 
         result.setOnMouseClicked(event -> {
             if(event.getButton().equals(MouseButton.PRIMARY)) {
                 if (event.getClickCount() == 2) {
-                    SingletonController.getInstance().getController().quotes.remove(tag);
+                    SingletonController.getInstance().getController().addQuotes.remove(tag);
                 }
             }
         });
@@ -66,7 +68,7 @@ class Tag extends FlowPane{
         result.setPrefHeight(20);
         result.setContentDisplay(ContentDisplay.RIGHT);
         setStyle("-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent lightgrey transparent;");
-        result.setMinWidth(652);
+        result.setMinWidth(getMinWidth());
 
         getChildren().add(result);
     }
