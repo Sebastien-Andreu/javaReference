@@ -1,0 +1,151 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.image.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.Controller">
+   <AnchorPane fx:id="rootView" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="938.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+      <children>
+         <AnchorPane fx:id="anchorPaneFile" layoutX="30.0" layoutY="65.0" prefHeight="410.0" prefWidth="196.0">
+            <children>
+               <ScrollPane fx:id="scrollShowFile" layoutX="3.0" layoutY="2.0" prefHeight="408.0" prefWidth="268.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+                 <content>
+                     <VBox fx:id="showFile" onDragDropped="#handleDroppedRemove" onDragOver="#handleDragOverRemove" prefHeight="398.0" prefWidth="262.0" />
+                 </content>
+               </ScrollPane>
+            </children>
+         </AnchorPane>
+         <AnchorPane fx:id="anchorPaneExtractFile" layoutX="31.0" layoutY="481.0" prefHeight="162.0" prefWidth="270.0">
+            <children>
+               <ScrollPane fx:id="scrollExtractFile" layoutX="2.0" prefHeight="133.0" prefWidth="268.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+                 <content>
+                     <VBox fx:id="showExtractFile" onDragDropped="#handleDropped" onDragOver="#handleDragOver" prefHeight="125.0" prefWidth="261.0" />
+                 </content>
+               </ScrollPane>
+               <HBox fx:id="hBoxExtractFile" alignment="CENTER" layoutX="2.0" layoutY="142.0" prefHeight="25.0" prefWidth="268.0">
+                  <children>
+                     <Button fx:id="buttonExtractFile" alignment="CENTER" contentDisplay="CENTER" mnemonicParsing="false" text="Extract" />
+                  </children>
+               </HBox>
+            </children>
+         </AnchorPane>
+         <AnchorPane fx:id="anchorPaneDetails" layoutX="315.0" layoutY="67.0" prefHeight="547.0" prefWidth="584.0" style="-fx-border-color: lightgrey;" visible="false">
+            <children>
+               <AnchorPane layoutY="8.0" prefHeight="152.0" prefWidth="582.0">
+                  <children>
+                     <Label fx:id="detailsTitle" layoutX="280.0" layoutY="6.0" text="Title" />
+                     <Label layoutX="15.0" layoutY="35.0" text="Name :" />
+                     <Label layoutX="15.0" layoutY="60.0" text="Author :" />
+                     <Label layoutX="15.0" layoutY="85.0" text="Date :" />
+                     <Label layoutX="15.0" layoutY="110.0" text="Theme :" />
+                     <Label layoutX="15.0" layoutY="135.0" text="Type of document :" />
+                     <Label fx:id="detailsName" layoutX="62.0" layoutY="35.0" />
+                     <Label fx:id="detailsAuthor" layoutX="67.0" layoutY="60.0" />
+                     <Label fx:id="detailsDate" layoutX="55.0" layoutY="85.0" />
+                     <Label fx:id="detailsTheme" layoutX="66.0" layoutY="110.0" />
+                     <Label fx:id="detailsTypeOfDocument" layoutX="127.0" layoutY="135.0" />
+                     <Button fx:id="closeButtonDetails" layoutX="559.0" layoutY="-6.0" mnemonicParsing="false" onAction="#onActionCloseDetails" prefHeight="9.0" prefWidth="23.0" text="X" />
+                  </children>
+               </AnchorPane>
+               <AnchorPane layoutY="294.0" prefHeight="117.0" prefWidth="578.0">
+                  <children>
+                     <Label layoutX="275.0" layoutY="3.0" text="Notes" />
+                     <ScrollPane layoutX="4.0" layoutY="20.0" prefHeight="102.0" prefWidth="574.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+                        <content>
+                           <VBox fx:id="showNotes" prefHeight="95.0" prefWidth="566.0" />
+                        </content>
+                     </ScrollPane>
+                  </children>
+               </AnchorPane>
+               <AnchorPane layoutY="172.0" prefHeight="117.0" prefWidth="578.0">
+                  <children>
+                     <Label layoutX="262.0" layoutY="3.0" text="Key words" />
+                     <ScrollPane layoutX="4.0" layoutY="20.0" prefHeight="102.0" prefWidth="574.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+                        <content>
+                           <FlowPane fx:id="showTags" prefHeight="96.0" prefWidth="565.0" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" rowValignment="TOP" vgap="5.0" />
+                        </content>
+                     </ScrollPane>
+                  </children>
+               </AnchorPane>
+               <AnchorPane layoutY="416.0" prefHeight="117.0" prefWidth="578.0">
+                  <children>
+                     <Label layoutX="272.0" layoutY="3.0" text="Quotes" />
+                     <ScrollPane layoutX="4.0" layoutY="20.0" prefHeight="102.0" prefWidth="574.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+                        <content>
+                           <VBox fx:id="showQuotes" prefHeight="95.0" prefWidth="566.0" />
+                        </content>
+                     </ScrollPane>
+                  </children>
+               </AnchorPane>
+            </children></AnchorPane>
+         <TextField layoutX="200.0" layoutY="14.0" prefHeight="25.0" prefWidth="558.0" />
+         <Label layoutX="144.0" layoutY="18.0" text="Search" />
+         <HBox alignment="CENTER" layoutX="315.0" layoutY="621.0" prefHeight="25.0" prefWidth="584.0">
+            <children>
+               <Button fx:id="modifyDetails" mnemonicParsing="false" text="Edit" visible="false" />
+            </children>
+         </HBox>
+         <Button fx:id="buttonAddFile" layoutX="3.0" layoutY="3.0" mnemonicParsing="false" onAction="#onButtonAddFileClicked" text="add new file" />
+      </children>
+   </AnchorPane>
+   <AnchorPane fx:id="rootAdd" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="657.0" prefWidth="938.0" visible="false" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1">
+      <Label alignment="CENTER" layoutX="19.0" layoutY="14.0" prefHeight="17.0" prefWidth="902.0" text="Drag and drop your file in the field below :" />
+      <AnchorPane layoutX="19.0" layoutY="41.0" prefHeight="47.0" prefWidth="902.0" style="-fx-border-color: lightgrey; -fx-border-width: 1px 1px 1px 1px;">
+         <children>
+            <ImageView fitHeight="45.0" fitWidth="562.0" onDragDropped="#handleDropAdd" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="true" />
+            <ImageView fx:id="showIcon" fitHeight="25.0" fitWidth="25.0" layoutX="14.0" layoutY="9.0" onDragDropped="#handleDropAdd" onDragOver="#handleDragOver" pickOnBounds="true" preserveRatio="true" />
+            <Label fx:id="titleOfImportFileAdd" layoutX="50.0" layoutY="13.0" onDragDropped="#handleDropAdd" onDragOver="#handleDragOver" prefHeight="17.0" prefWidth="833.0" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="19.0" layoutY="98.0" prefHeight="179.0" prefWidth="314.0">
+         <children>
+            <Label layoutY="19.0" prefHeight="17.0" prefWidth="53.0" text="Title :" />
+            <TextField fx:id="titleAdd" layoutX="53.0" layoutY="14.0" prefHeight="25.0" prefWidth="344.0" />
+            <Label layoutX="1.0" layoutY="54.0" prefHeight="17.0" prefWidth="53.0" text="Author :" />
+            <TextField fx:id="authorAdd" layoutX="53.0" layoutY="49.0" prefHeight="25.0" prefWidth="344.0" />
+            <Label layoutX="1.0" layoutY="124.0" prefHeight="17.0" prefWidth="45.0" text="Theme :" />
+            <TextField fx:id="themeAdd" layoutX="53.0" layoutY="119.0" prefHeight="25.0" prefWidth="344.0" />
+            <Label layoutY="159.0" prefHeight="17.0" prefWidth="108.0" text="Type of document :" />
+            <TextField fx:id="typeOfDocumentAdd" layoutX="112.0" layoutY="154.0" prefHeight="25.0" prefWidth="286.0" />
+            <DatePicker fx:id="dateAdd" layoutX="53.0" layoutY="83.0" prefHeight="25.0" prefWidth="344.0" />
+            <Label layoutX="1.0" layoutY="88.0" prefHeight="17.0" prefWidth="53.0" text="Date :" />
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="443.0" layoutY="98.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="187.0" prefWidth="478.0">
+         <children>
+            <Label layoutX="5.0" layoutY="18.0" prefHeight="17.0" prefWidth="79.0" text="Key words :" />
+            <TextField fx:id="inputAddTags" layoutX="79.0" layoutY="14.0" onKeyPressed="#onEnterKeyPressTags" prefHeight="25.0" prefWidth="398.0" />
+            <ScrollPane layoutX="7.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="132.0" prefWidth="471.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+               <content>
+                  <FlowPane fx:id="showAddTags" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="128.0" prefWidth="464.0" rowValignment="TOP" vgap="5.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="14.0" layoutY="299.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="139.0" prefWidth="910.0">
+         <children>
+            <Label layoutX="5.0" layoutY="18.0" prefHeight="17.0" prefWidth="79.0" text="Notes :" />
+            <TextField fx:id="inputAddNotes" layoutX="61.0" layoutY="14.0" onKeyPressed="#onEnterKeyPressNotes" prefHeight="25.0" prefWidth="848.0" />
+            <ScrollPane layoutX="7.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="902.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+               <content>
+                  <FlowPane fx:id="showAddNotes" cache="true" hgap="5.0" prefHeight="106.0" prefWidth="895.0" rowValignment="TOP" vgap="5.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+      <AnchorPane layoutX="14.0" layoutY="457.0" maxHeight="1.7976931348623157E308" maxWidth="1.7976931348623157E308" prefHeight="139.0" prefWidth="679.0">
+         <children>
+            <Label layoutX="5.0" layoutY="18.0" prefHeight="17.0" prefWidth="79.0" text="Quotes :" />
+            <TextField fx:id="inputAddQuotes" layoutX="61.0" layoutY="14.0" onKeyPressed="#onEnterKeyPressQuotes" prefHeight="25.0" prefWidth="848.0" />
+            <ScrollPane layoutX="7.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="902.0" style="-fx-background-color: transparent,-fx-box-border,-fx-control-inner-background; -fx-background-insets: -1.4, 0, 1; -fx-background-radius: 1.4, 0, 0; -fx-padding: 1;">
+               <content>
+                  <FlowPane fx:id="showAddQuotes" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="106.0" prefWidth="895.0" rowValignment="TOP" vgap="5.0" />
+               </content>
+            </ScrollPane>
+         </children>
+      </AnchorPane>
+      <Button layoutX="369.0" layoutY="623.0" mnemonicParsing="false" onAction="#saveData" prefHeight="25.0" prefWidth="149.0" text="Save" />
+      <Button layoutX="911.0" layoutY="3.0" mnemonicParsing="false" onAction="#onCancelAddClicked" text="X" />
+   </AnchorPane>
+</AnchorPane>

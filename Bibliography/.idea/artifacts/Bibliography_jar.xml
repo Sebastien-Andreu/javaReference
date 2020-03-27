@@ -1,0 +1,14 @@
+<component name="ArtifactManager">
+  <artifact name="Bibliography:jar">
+    <output-path>$PROJECT_DIR$/out/artifacts/Bibliography_jar</output-path>
+    <root id="root">
+      <element id="archive" name="Bibliography.jar">
+        <element id="module-output" name="Bibliography.main" />
+      </element>
+      <element id="library" level="project" name="Gradle: org.hamcrest:hamcrest-core:1.3" />
+      <element id="library" level="project" name="Gradle: org.xerial:sqlite-jdbc:3.30.1" />
+      <element id="library" level="project" name="Gradle: org.json:json:20190722" />
+      <element id="library" level="project" name="Gradle: junit:junit:4.12" />
+    </root>
+  </artifact>
+</component>
