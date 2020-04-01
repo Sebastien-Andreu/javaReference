@@ -1,16 +1,16 @@
 package singleton;
 
+import javax.swing.text.html.ListView;
 import java.io.File;
 import java.sql.*;
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.Collections;
-import java.util.List;
+import java.util.*;
 
 public class SingletonDatabase {
     public static SingletonDatabase instance = new SingletonDatabase();
     public int IDFile = 0;
     public int IDFileSelected;
+    public int IDTheme = 0;
+    public int IDTypeOfDocument = 0;
 
     private SingletonDatabase(){}
 
@@ -21,9 +21,9 @@ public class SingletonDatabase {
     private Connection connect() {
         String url = "jdbc:sqlite:BD.db";
         Connection conn = null;
-        File directory = new File(url);
+        File directory = new File("BD.db");
         if (!directory.exists()) {
-            System.out.println("existe pas");
+            System.out.println("not exist");
             createDatabase();
         }
         try {
@@ -34,78 +34,94 @@ public class SingletonDatabase {
         return conn;
     }
 
-    public void showDetailsOfFile(String name) {
-        String query = "select * from File where name = '" +name +"'";
+    public void setDetailsOfFile(code.File file) {
+
+        String query = "select * from File where name = '" + file.getName() +"'";
         try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
             IDFileSelected = rs.getInt("ID");
+            IDTheme = rs.getInt("ID_Theme");
+            IDTypeOfDocument = rs.getInt("ID_TypeOfDocument");
             if (IDFileSelected > 0) {
-                SingletonController.getInstance().getController().detailsTitle.setText(rs.getString("title"));
-                SingletonController.getInstance().getController().detailsName.setText(rs.getString("name"));
-                SingletonController.getInstance().getController().detailsAuthor.setText(rs.getString("author"));
-                SingletonController.getInstance().getController().detailsDate.setText(rs.getString("date"));
-                SingletonController.getInstance().getController().detailsTheme.setText(rs.getString("theme"));
-                SingletonController.getInstance().getController().detailsTypeOfDocument.setText(rs.getString("typeOfDocument"));
+                file.title = (rs.getString("title"));
+                file.author = (rs.getString("author"));
+                file.date = (rs.getString("date"));
+                file.extension = (rs.getString("extension"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
+        String queryTheme = "select name from Theme where ID = '" + IDTheme +"'";
+        try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(queryTheme)) {
+            file.theme = rs.getString("name");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        String queryTypeOfDocument = "select name from TypeOfDocument where ID = '" + IDTypeOfDocument +"'";
+        try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(queryTypeOfDocument)) {
+            file.typeOfDocument = rs.getString("name");
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
         String query2 = "select * from KeyWord where ID_File = '" + IDFileSelected +"'";
-        SingletonController.getInstance().getController().tags.clear();
         try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(query2)) {
-            int id = rs.getInt("ID");
-            if (id > 0 && (!Collections.singletonList(rs.getString("Key")).get(0).equals("[]")))  {
-                for (String str : getList(rs.getString("Key"))){
-                    SingletonController.getInstance().getController().tags.add(str);
-                }
+            if (!Collections.singletonList(rs.getString("Key")).get(0).equals("[]"))  {
+                file.tags = getList(rs.getString("Key"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         String query3 = "select * from Note where ID_File = '" + IDFileSelected +"'";
-        SingletonController.getInstance().getController().notes.clear();
         try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(query3)) {
-            int id = rs.getInt("ID");
-            if (id > 0 && (!Collections.singletonList(rs.getString("Note")).get(0).equals("[]")))  {
-                for (String str : getList(rs.getString("Note"))){
-                    SingletonController.getInstance().getController().notes.add(str);
-                }
+            if (!Collections.singletonList(rs.getString("Note")).get(0).equals("[]"))  {
+                file.notes = getList(rs.getString("Note"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
 
         String query4 = "select * from Quote where ID_File = '" + IDFileSelected +"'";
-        SingletonController.getInstance().getController().quotes.clear();
         try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(query4)) {
-            int id = rs.getInt("ID");
-            if (id > 0 && (!Collections.singletonList(rs.getString("Quote")).get(0).equals("[]")))  {
-                for (String str : getList(rs.getString("Quote"))){
-                    SingletonController.getInstance().getController().quotes.add(str);
-                }
+            if (!Collections.singletonList(rs.getString("Quote")).get(0).equals("[]"))  {
+                file.quotes = getList(rs.getString("Quote"));
             }
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
     }
 
+    public void save(){
+        saveTheme();
+        saveTypeOfDocument();
+        saveFile();
+        saveKeyWord();
+        saveNote();
+        saveQuote();
+    }
+
     public void saveFile(){
+
         String sql;
         if (SingletonController.getInstance().getController().buttonUpdateFile.isVisible()){
-            sql = "update File set name = ?, extension = ? ,title = ? ,author = ?, date = ?, theme = ?, typeOfDocument = ? where ID = " + IDFileSelected;
+            sql = "update File set name = ?, extension = ? ,title = ? ,author = ?, date = ?, ID_Theme = ?, ID_TypeOfDocument = ? where ID = " + IDFileSelected;
         }else {
-            sql = "INSERT INTO File(name,extension,title,author, date, theme, typeOfDocument) VALUES(?,?,?,?,?,?,?)";
+            sql = "INSERT INTO File(name,extension,title,author, date, ID_Theme, ID_TypeOfDocument) VALUES(?,?,?,?,?,?,?)";
         }
 
+        String extension = SingletonController.getInstance().getController().titleOfImportFileAdd.getText().substring(
+                SingletonController.getInstance().getController().titleOfImportFileAdd.getText().lastIndexOf(".") + 1
+        );
         try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
             pstmt.setString(1, SingletonController.getInstance().getController().titleOfImportFileAdd.getText());
-            pstmt.setString(2, SingletonController.getInstance().getController().extensionOfFile);
+            pstmt.setString(2, extension);
             pstmt.setString(3, SingletonController.getInstance().getController().titleAdd.getText());
             pstmt.setString(4, SingletonController.getInstance().getController().authorAdd.getText());
             pstmt.setString(5, SingletonController.getInstance().getController().dateAdd.getValue().toString());
-            pstmt.setString(6, SingletonController.getInstance().getController().themeAdd.getText());
-            pstmt.setString(7, SingletonController.getInstance().getController().typeOfDocumentAdd.getText());
+            pstmt.setInt(6, IDTheme);
+            pstmt.setInt(7, IDTypeOfDocument);
 
             pstmt.executeUpdate();
         } catch (SQLException e) {
@@ -118,22 +134,54 @@ public class SingletonDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
-        SingletonController.getInstance().getController().showIcon.setImage(null);
-        SingletonController.getInstance().getController().titleOfImportFileAdd.setText("");
-        SingletonController.getInstance().getController().titleAdd.setText("");
-        SingletonController.getInstance().getController().authorAdd.setText("");
-        SingletonController.getInstance().getController().dateAdd.setValue(null);
-        SingletonController.getInstance().getController().themeAdd.setText("");
-        SingletonController.getInstance().getController().typeOfDocumentAdd.setText("");
-        saveKeyWord();
     }
+
+    private void saveTheme(){
+        IDTheme = verifyIfThemeAlreadyExist(SingletonController.getInstance().getController().themeAdd.getValue());
+        if (IDTheme == 0){
+            String sql;
+            sql = "INSERT INTO Theme(name) VALUES(?)";
+            try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, SingletonController.getInstance().getController().themeAdd.getValue());
+                pstmt.executeUpdate();
+                String sqlSelect = "SELECT max(ID) FROM Theme";
+                try (Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(sqlSelect)) {
+                    IDTheme = rs.getInt("max(ID)");
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+    private void saveTypeOfDocument(){
+        IDTypeOfDocument = verifyIfTypeOfDocumentAlreadyExist(SingletonController.getInstance().getController().typeOfDocumentAdd.getValue());
+        if (IDTypeOfDocument == 0){
+            String sql;
+            sql = "INSERT INTO TypeOfDocument(name) VALUES(?)";
+            try (Connection conn = this.connect(); PreparedStatement pstmt = conn.prepareStatement(sql)) {
+                pstmt.setString(1, SingletonController.getInstance().getController().typeOfDocumentAdd.getValue());
+                pstmt.executeUpdate();
+                String sqlSelect = "SELECT max(ID) FROM TypeOfDocument";
+                try (Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(sqlSelect)) {
+                    IDTypeOfDocument = rs.getInt("max(ID)");
+                } catch (SQLException e) {
+                    System.out.println(e.getMessage());
+                }
+            } catch (SQLException e) {
+                System.out.println(e.getMessage());
+            }
+        }
+    }
+
+
 
     private void saveKeyWord(){
         String sql;
         if (SingletonController.getInstance().getController().buttonUpdateFile.isVisible()){
             sql = "update KeyWord set Key = ?, ID_File = ? where ID_File = " + IDFileSelected;
-            IDFile = IDFileSelected;
         }else {
             sql = "INSERT INTO KeyWord(Key, ID_File) VALUES(?,?)";
         }
@@ -144,9 +192,6 @@ public class SingletonDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
-        SingletonController.getInstance().getController().addTags.clear();
-        saveNote();
     }
 
     private void saveNote(){
@@ -164,9 +209,6 @@ public class SingletonDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-
-        SingletonController.getInstance().getController().addNotes.clear();
-        saveQuote();
     }
 
     private void saveQuote(){
@@ -183,13 +225,95 @@ public class SingletonDatabase {
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }
-        SingletonController.getInstance().getController().addQuotes.clear();
+    }
+
+    private int verifyIfThemeAlreadyExist(String theme){
+        String sql = "select * from Theme where name = '" + theme +"'";
+        int result = 0;
+        try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.getInt("ID") > 0)  {
+                result = rs.getInt("ID");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    private int verifyIfTypeOfDocumentAlreadyExist(String typeOfDocument){
+        String sql = "select * from TypeOfDocument where name = '" + typeOfDocument +"'";
+        int result = 0;
+        try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)) {
+            if (rs.getInt("ID") > 0)  {
+                result = rs.getInt("ID");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return result;
+    }
+
+    public ArrayList<String> getAllTheme(){
+        String query2 = "select name from Theme";
+        ArrayList<String> list = new ArrayList<>();
+        try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(query2)) {
+            list.add("none");
+            while (rs.next()) {
+                list.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
+    }
+
+    public ArrayList<String> getAllTypeOfDocument(){
+        String query2 = "select name from TypeOfDocument";
+        ArrayList<String> list = new ArrayList<>();
+        try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(query2)) {
+            list.add("none");
+            while (rs.next()) {
+                list.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
     }
 
     private List<String> getList(String list){
         String replace = list.replace("[","");
         String replace1 = replace.replace("]","");
         return new ArrayList<String>(Arrays.asList(replace1.split(",")));
+    }
+
+    public List<String> getFileWithParams(String theme, String typeOfDocument){
+        String query = "";
+        if (!theme.equals("none") && typeOfDocument.equals("none")){
+            query = "select F.name from File F " +
+                    "inner join Theme T on T.ID == F.ID_Theme " +
+                    "where T.name = '" + theme + "'";
+        }
+        if (theme.equals("none") && !typeOfDocument.equals("none")){
+            query = "select F.name from File F " +
+                    "inner join TypeOfDocument TY on TY.ID == F.ID_TypeOfDocument " +
+                    "where TY.name = '" + typeOfDocument + "'";
+        }
+        if (!theme.equals("none") && !typeOfDocument.equals("none")){
+            query = "select F.name from File F " +
+                    "inner join Theme T on T.ID == F.ID_Theme " +
+                    "inner join TypeOfDocument TY on TY.ID == F.ID_TypeOfDocument " +
+                    "where T.name = '" + theme + "' and TY.name = '" + typeOfDocument + "'";
+        }
+        ArrayList<String> list = new ArrayList<>();
+        try (Connection conn = this.connect(); Statement stmt  = conn.createStatement(); ResultSet rs = stmt.executeQuery(query)) {
+            while (rs.next()) {
+                list.add(rs.getString("name"));
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+        return list;
     }
 
     private void createDatabase() {
@@ -201,8 +325,10 @@ public class SingletonDatabase {
                 "\t\"title\"\tREAL NOT NULL,\n" +
                 "\t\"author\"\tREAL NOT NULL,\n" +
                 "\t\"date\"\tREAL NOT NULL,\n" +
-                "\t\"theme\"\tREAL NOT NULL,\n" +
-                "\t\"typeOfDocument\"\tREAL NOT NULL\n" +
+                "\t\"ID_Theme\"\tREAL NOT NULL,\n" +
+                "\t\"ID_TypeOfDocument\"\tREAL NOT NULL,\n" +
+                "\tFOREIGN KEY(\"ID_Theme\") REFERENCES \"Theme\"(\"ID\"),\n" +
+                "\tFOREIGN KEY(\"ID_TypeOfDocument\") REFERENCES \"TypeOfDocument\"(\"ID\")\n" +
                 ");";
         String tag = "CREATE TABLE IF NOT EXISTS \"KeyWord\" (\n" +
                 "\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
@@ -222,12 +348,22 @@ public class SingletonDatabase {
                 "\t\"ID_File\"\tINTEGER NOT NULL,\n" +
                 "\tFOREIGN KEY(\"ID_File\") REFERENCES \"File\"(\"ID\")\n" +
                 ")";
+        String theme = "CREATE TABLE \"Theme\" (\n" +
+                "\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+                "\t\"name\"\tREAL NOT NULL\n"+
+                ")";
+        String typeOfDocument = "CREATE TABLE \"TypeOfDocument\" (\n" +
+                "\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n" +
+                "\t\"name\"\tREAL NOT NULL\n"+
+                ")";
         try (Connection conn = DriverManager.getConnection(url);
              Statement stmt = conn.createStatement()) {
-            stmt.execute(file);
-            stmt.execute(tag);
-            stmt.execute(note);
-            stmt.execute(quote);
+                stmt.execute(theme);
+                stmt.execute(typeOfDocument);
+                stmt.execute(file);
+                stmt.execute(tag);
+                stmt.execute(note);
+                stmt.execute(quote);
         } catch (SQLException e) {
             System.out.println(e.getMessage());
         }

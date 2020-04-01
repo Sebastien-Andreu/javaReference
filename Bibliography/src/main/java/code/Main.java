@@ -8,9 +8,12 @@ import javafx.stage.Stage;
 
 public class Main extends Application {
 
+    public static Stage stage;
+
     @Override
     public void start(Stage primaryStage) throws Exception{
         Parent root = FXMLLoader.load(ClassLoader.getSystemResource("xml/sample.fxml"));
+        stage = primaryStage;
         primaryStage.setTitle("Bibliography");
         primaryStage.setScene(new Scene(root));
         primaryStage.show();

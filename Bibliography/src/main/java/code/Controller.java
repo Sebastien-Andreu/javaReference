@@ -18,9 +18,16 @@ import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.stage.FileChooser;
+import org.apache.commons.io.FileUtils;
+import org.apache.commons.io.FilenameUtils;
 import org.json.JSONObject;
+import org.zeroturnaround.zip.ZipUtil;
 import singleton.SingletonController;
 import singleton.SingletonDatabase;
+import tag.Tag;
+import tag.TagNote;
+import tag.TagQuote;
 
 import javax.swing.*;
 import javax.swing.filechooser.FileSystemView;
@@ -32,12 +39,12 @@ import java.io.ObjectInputStream;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
-
 
 public class Controller {
 
@@ -46,6 +53,9 @@ public class Controller {
 
     @FXML
     AnchorPane rootView;
+
+    @FXML
+    AnchorPane rootSearch;
 
     @FXML
     AnchorPane anchorPaneFile;
@@ -141,10 +151,22 @@ public class Controller {
     public DatePicker dateAdd;
 
     @FXML
-    public TextField themeAdd;
+    public DatePicker dateMin;
 
     @FXML
-    public TextField typeOfDocumentAdd;
+    public DatePicker dateMax;
+
+    @FXML
+    public ComboBox<String> themeAdd;
+
+    @FXML
+    public ComboBox<String> typeOfDocumentAdd;
+
+    @FXML
+    public ComboBox<String> listTheme;
+
+    @FXML
+    public ComboBox<String> listTypeOfDocument;
 
     @FXML
     Button buttonAddFile;
@@ -156,15 +178,18 @@ public class Controller {
     @FXML
     Label labelAddFile;
 
-    public List<File> files;
-    public List<File> listOfFileExtract = new ArrayList<>();
+    @FXML
+    HBox buttonEdit;
 
+    public List<code.File> codeFilesExtract = new ArrayList<>();
+    public List<code.File> codeFiles = new ArrayList<>();
+
+    public List<File> files = new ArrayList<>();
+    public List<Image> images = new ArrayList<>();
     public List<File> filesAdd;
     public String directoryDestination = "biblio";
-    public String extensionOfFile;
 
-    public ObservableList<String> stringFile = FXCollections.observableArrayList();
-    public ObservableList<String> stringFileExtract = FXCollections.observableArrayList();
+
     public ObservableList<String> tags = FXCollections.observableArrayList();
     public ObservableList<String> notes = FXCollections.observableArrayList();
     public ObservableList<String> quotes = FXCollections.observableArrayList();
@@ -172,13 +197,10 @@ public class Controller {
     public ObservableList<String> addTags = FXCollections.observableArrayList();
     public ObservableList<String> addNotes = FXCollections.observableArrayList();
     public ObservableList<String> addQuotes = FXCollections.observableArrayList();
-    public List<Image> pictureFile = new ArrayList<>();
-    public List<Image> pictureFileExtract = new ArrayList<>();
+
 
     @FXML
     public void initialize(){
-        stringFile.addListener(this::eventListenerAllFile);
-        stringFileExtract.addListener(this::eventListenerExtractFile);
         tags.addListener(this::eventListenerTags);
         notes.addListener(this::eventListenerNotes);
         quotes.addListener(this::eventListenerQuotes);
@@ -186,15 +208,42 @@ public class Controller {
         addNotes.addListener(this::eventListenerAddNotes);
         addQuotes.addListener(this::eventListenerAddQuotes);
 
+
+        themeAdd.setEditable(true);
+        themeAdd.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+            themeAdd.setValue(newText);
+        });
+
+        typeOfDocumentAdd.setEditable(true);
+        typeOfDocumentAdd.getEditor().textProperty().addListener((obs, oldText, newText) -> {
+            typeOfDocumentAdd.setValue(newText);
+        });
+
+        setComboBox();
+
         setupListOfFile();
 
         getFile();
 
+        org.apache.log4j.BasicConfigurator.configure();
         SingletonController.getInstance().setController(this);
     }
 
-    private void getFile(){
+    private void setComboBox(){
+        listTheme.getItems().clear();
+        listTypeOfDocument.getItems().clear();
+
+        listTheme.getItems().addAll(SingletonDatabase.getInstance().getAllTheme());
+        listTypeOfDocument.getItems().addAll(SingletonDatabase.getInstance().getAllTypeOfDocument());
+
+        listTheme.setValue("none");
+        listTypeOfDocument.setValue("none");
+    }
+
+    public void getFile(){
         File directory = new File(directoryDestination);
+        codeFiles.clear();
+        showFile.getChildren().clear();
         if (!directory.exists()){
             directory.mkdir();
         } else {
@@ -211,36 +260,11 @@ public class Controller {
                 icon.paintIcon(null,bufferedImage.getGraphics(), 0, 0);
                 Platform.runLater(() -> {
                     Image img = SwingFXUtils.toFXImage(bufferedImage, null);
-                    pictureFile.add(img);
-                    stringFile.add(f.getName());
+                    images.add(img);
+                    codeFiles.add(new code.File(f, img));
+                    codeFiles.get(codeFiles.size()-1).setContainer("file");
+                    showFile.getChildren().add(codeFiles.get(codeFiles.size()-1).getFlowPane());
                 });
-            }
-        }
-    }
-
-
-    private void eventListenerAllFile(ListChangeListener.Change<? extends String> change){
-        while (change.next()){
-            if (change.wasAdded()){
-                code.File file = new code.File(stringFile.get(stringFile.size()-1), pictureFile.get(pictureFile.size()-1), (stringFile.size()-1));
-                file.setContainer("file");
-                showFile.getChildren().add(file.getFlowPane());
-            }
-            if (change.wasRemoved()){
-                showFile.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
-            }
-        }
-    }
-
-    private void eventListenerExtractFile(ListChangeListener.Change<? extends String> change){
-        while (change.next()){
-            if (change.wasAdded()){
-                code.File file = new code.File(stringFileExtract.get(stringFileExtract.size()-1), pictureFileExtract.get(pictureFileExtract.size()-1), (stringFileExtract.size()-1));
-                file.setContainer("extract");
-                showExtractFile.getChildren().add(file.getFlowPane());
-            }
-            if (change.wasRemoved()){
-                showExtractFile.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
             }
         }
     }
@@ -289,20 +313,18 @@ public class Controller {
     }
 
     @FXML
-    private void handleDropped(DragEvent event) throws IOException, ClassNotFoundException {
+    private void handleDropped(DragEvent event){
         try {
-            int i = 0;
             JSONObject object = new JSONObject(getFile(event.getDragboard().getString()).toString());
             String name = object.getString("name");
             if (droppedIsPossible(name)){
-                for (File f : files){
-                    if (stringFile.get(i).equals(name)){
-                        listOfFileExtract.add(f);
-                        pictureFileExtract.add(pictureFile.get(i));
-                        stringFileExtract.add(stringFile.get(i));
+                for (code.File f : codeFiles){
+                    if (f.getName().equals(name)){
+                        codeFilesExtract.add(new code.File(f.getFile(), f.getImage())); // just f to remove
+                        codeFilesExtract.get(codeFilesExtract.size()-1).setContainer("extract");
+                        showExtractFile.getChildren().add(codeFilesExtract.get(codeFilesExtract.size()-1).getFlowPane());
                         break;
                     }
-                    ++i;
                 }
             }
         }catch (Exception e){
@@ -321,29 +343,23 @@ public class Controller {
             JSONObject object = new JSONObject(getFile(event.getDragboard().getString()).toString());
             String name = object.getString("name");
             String container = object.getString("container");
-            int i = 0;
             if (droppedForRemoveIsPossible(name, container)) {
-                for (File f : listOfFileExtract) {
-                    if (stringFileExtract.get(i).equals(name)) {
-                        pictureFileExtract.remove(i);
-                        stringFileExtract.remove(i);
-
-                        listOfFileExtract.remove(f);
+                for (code.File f : codeFilesExtract) {
+                    if (f.getName().equals(name)) {
+                        f.removeInExtractFile();
                         break;
                     }
-                    ++i;
                 }
             }
         } catch (Exception e){
             System.out.println(e.getMessage());
         }
-
     }
 
     private boolean droppedIsPossible(String name){
         boolean alreadyExist = true;
-        for (String s : stringFileExtract){
-            if (s.equals(name)) {
+        for (code.File s : codeFilesExtract){
+            if (s.getName().equals(name)) {
                 alreadyExist = false;
                 break;
             }
@@ -356,8 +372,8 @@ public class Controller {
         if (container.equals("file"))
             return false;
 
-        for (String f : stringFileExtract){
-            if (f.equals(name)) {
+        for (code.File s : codeFilesExtract){
+            if (s.getName().equals(name)) {
                 alreadyExist = true;
                 break;
             }
@@ -365,7 +381,7 @@ public class Controller {
         return alreadyExist;
     }
 
-    private Object getFile( String s ) throws IOException , ClassNotFoundException {
+    private Object getFile( String s ) throws IOException, ClassNotFoundException {
         byte [] data = Base64.getDecoder().decode( s );
         ObjectInputStream ois = new ObjectInputStream(new ByteArrayInputStream(  data ) );
         Object o  = ois.readObject();
@@ -376,6 +392,7 @@ public class Controller {
     private void setupListOfFile(){
         anchorPaneDetails.setVisible(false);
         modifyDetails.setVisible(false);
+        buttonEdit.setVisible(false);
         double widthMaxSize = 870;
         anchorPaneFile.setMinWidth(widthMaxSize);
         scrollShowFile.setMinWidth(widthMaxSize);
@@ -387,12 +404,24 @@ public class Controller {
         hBoxExtractFile.setMinWidth(widthMaxSize);
     }
 
+    @FXML
     public void onActionCloseDetails(ActionEvent actionEvent) {
         setupListOfFile();
     }
 
+    @FXML
     public void onButtonAddFileClicked(ActionEvent actionEvent) {
         rootView.setVisible(false);
+        rootSearch.setVisible(false);
+        clearAddFile();
+        buttonAddFile.setVisible(true);
+        buttonUpdateFile.setVisible(false);
+        labelAddFile.setVisible(true);
+        rootAdd.setVisible(true);
+        Platform.runLater( () -> rootAdd.requestFocus() );
+    }
+
+    private void clearAddFile(){
         addTags.clear();
         addQuotes.clear();
         addNotes.clear();
@@ -401,13 +430,122 @@ public class Controller {
         titleAdd.setText("");
         authorAdd.setText("");
         dateAdd.setValue(null);
-        themeAdd.setText("");
-        typeOfDocumentAdd.setText("");
-        buttonAddFile.setVisible(true);
-        buttonUpdateFile.setVisible(false);
-        labelAddFile.setVisible(true);
-        rootAdd.setVisible(true);
-        Platform.runLater( () -> rootAdd.requestFocus() );
+        inputAddNotes.clear();
+        inputAddQuotes.clear();
+        inputAddTags.clear();
+        themeAdd.getItems().clear();
+        typeOfDocumentAdd.getItems().clear();
+
+        themeAdd.getItems().addAll(SingletonDatabase.getInstance().getAllTheme());
+        typeOfDocumentAdd.getItems().addAll(SingletonDatabase.getInstance().getAllTypeOfDocument());
+    }
+
+    @FXML
+    public void onUserWantToExtractFile(ActionEvent actionEvent) {
+        if (!codeFilesExtract.isEmpty()){
+            FileChooser fileChooser = new FileChooser();
+
+            FileChooser.ExtensionFilter extFilter = new FileChooser.ExtensionFilter("ZIP files (*.zip)", "*.zip");
+            fileChooser.getExtensionFilters().add(extFilter);
+
+            File file = fileChooser.showSaveDialog(Main.stage);
+
+            if (file != null) {
+                File directory = new File(file.getParent() + "\\" + FilenameUtils.removeExtension(file.getName()));
+                if (!directory.exists()) {
+                    directory.mkdir();
+                }
+                File extractMetadata = new File(directory + "\\metadata");
+                extractMetadata.mkdir();
+                for (code.File f : codeFilesExtract) {
+                    try {
+                        Files.copy(Paths.get(f.getFile().getAbsolutePath()), Paths.get(directory.getAbsolutePath() + "\\" + f.getName()));
+                    } catch (IOException e) {
+                        e.printStackTrace();
+                    }
+                }
+                for (code.File f : codeFilesExtract){
+                    assert extractMetadata != null;
+                    f.createFileWithData(extractMetadata);
+                }
+                try {
+                    ZipUtil.pack(new File(directory.getAbsolutePath()), new File(directory.getAbsolutePath() + ".zip"));
+                    FileUtils.deleteDirectory(directory);
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+                try {
+                    showExtractFile.getChildren().clear();
+                    codeFilesExtract.clear();
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                }
+            }
+        }
+    }
+
+    public void onThemeIsSelected(ActionEvent event) {
+        if (listTheme.getValue().equals("none") && listTypeOfDocument.getValue().equals("none") && dateMax.getValue() == null && dateMin.getValue() == null ){
+            getFile();
+        }
+        if (!listTheme.getValue().equals("none") || !listTypeOfDocument.getValue().equals("none")){
+            List<String> list = SingletonDatabase.getInstance().getFileWithParams(listTheme.getValue(), listTypeOfDocument.getValue());
+
+            codeFiles.clear();
+            showFile.getChildren().clear();
+            if (!list.isEmpty()){
+                System.out.println(list);
+                for (String file: list){
+                    int i = 0;
+                    for (File f : files){
+                        if (file.equals(f.getName())){
+                            codeFiles.add(new code.File(f, images.get(i)));
+                            codeFiles.get(codeFiles.size()-1).setContainer("file");
+                            showFile.getChildren().add(codeFiles.get(codeFiles.size()-1).getFlowPane());
+                        }
+                        ++i;
+                    }-
+                }
+            }
+        }
+        if (dateMax.getValue() != null || dateMin.getValue() != null){
+            if (listTheme.getValue().equals("none") && !listTypeOfDocument.getValue().equals("none")){
+                getFile();
+            }
+            loadWithDate();
+        }
+    }
+
+    private void loadWithDate(){
+        List<code.File> tempCodeFile = new ArrayList<>();
+        loadDataOfCodeFile();
+        if (dateMin.getValue() != null){
+            for (code.File f : codeFiles){
+                if (LocalDate.parse(f.date).isAfter(dateMin.getValue())){
+                    tempCodeFile.add(f);
+                }
+            }
+        }
+        if (dateMax.getValue() != null){
+            for (code.File f : codeFiles){
+                if (LocalDate.parse(f.date).isBefore(dateMax.getValue())){
+                    tempCodeFile.add(f);
+                }
+            }
+        }
+
+        codeFiles.clear();
+        showFile.getChildren().clear();
+        for (code.File f : tempCodeFile){
+            codeFiles.add(f);
+            showFile.getChildren().add(f.getFlowPane());
+        }
+    }
+
+    private void loadDataOfCodeFile(){
+        for (code.File f : codeFiles){
+            SingletonDatabase.getInstance().setDetailsOfFile(f);
+        }
     }
 
 
@@ -415,8 +553,7 @@ public class Controller {
 
 
 
-
-    /*-----------------------------------------------------------------------------------------------------------------*/
+   /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*-----------------------------------------------------------------------------------------------------------------*/
     /*---------------------------------------------------ADD NEW FILE--------------------------------------------------*/
@@ -496,7 +633,6 @@ public class Controller {
     @FXML
     private void handleDropAdd(DragEvent e){
         filesAdd = e.getDragboard().getFiles();
-        extensionOfFile = filesAdd.get(0).getName().substring( filesAdd.get(0).getName().lastIndexOf(".") + 1);
         Icon icon = FileSystemView.getFileSystemView().getSystemIcon(filesAdd.get(0));
 
         BufferedImage bufferedImage = new BufferedImage(icon.getIconWidth(), icon.getIconHeight(), BufferedImage.TYPE_INT_ARGB);
@@ -541,30 +677,39 @@ public class Controller {
             ex.printStackTrace();
         }
 
-        SingletonDatabase.getInstance().saveFile();
+        SingletonDatabase.getInstance().save();
+        clearAddFile();
     }
 
+    @FXML
     public void onCancelAddClicked(ActionEvent actionEvent) {
         rootAdd.setVisible(false);
-        stringFile.clear();
-        pictureFile.clear();
-
-        getFile();
-
+        clearAddFile();
         rootView.setVisible(true);
+        rootSearch.setVisible(true);
+
+        listTheme.setValue("none");
+        listTypeOfDocument.setValue("none");
+        getFile();
         Platform.runLater( () -> rootView.requestFocus() );
     }
 
+    @FXML
     public void onUserWantToUpdateFile(ActionEvent actionEvent) {
-        SingletonDatabase.getInstance().saveFile();
-        SingletonDatabase.getInstance().showDetailsOfFile(SingletonController.getInstance().getController().titleOfImportFileAdd.getText());
+        SingletonDatabase.getInstance().save();
+        for (code.File f : codeFiles) {
+            if (f.getName().equals(titleOfImportFileAdd.getText())) {
+                f.showView();
+            }
+        }
         rootAdd.setVisible(false);
-        stringFile.clear();
-        pictureFile.clear();
-
-        getFile();
-
+        clearAddFile();
         rootView.setVisible(true);
+        rootSearch.setVisible(true);
+
+        listTheme.setValue("none");
+        listTypeOfDocument.setValue("none");
+        getFile();
         Platform.runLater( () -> rootView.requestFocus() );
     }
 }
