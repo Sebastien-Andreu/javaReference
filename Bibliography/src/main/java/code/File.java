@@ -223,7 +223,7 @@ public class File implements Serializable {
                 writer.println("");
                 writer.println("");
                 writer.println("Key word :\t");
-                String[] ary = ((String)this.firstMap.get("keyWord")).replace("\"", "").replace("[", "").replace("]", "").split(",");
+                String[] ary = this.firstMap.get("keyWord").replace("\"", "").replace("[", "").replace("]", "").split(",");
 
                 for(String str : ary) {
                     writer.write("\t" + str);
@@ -245,6 +245,8 @@ public class File implements Serializable {
                 writer.println("");
             } catch (Exception e) {
                 System.out.println(e.getMessage());
+            } finally {
+                writer.close();
             }
         } catch (Exception var18) {
             System.out.println(var18.getMessage());
@@ -276,7 +278,6 @@ public class File implements Serializable {
                 break;
             }
         }
-
     }
 
     public void setContainer(String container) {

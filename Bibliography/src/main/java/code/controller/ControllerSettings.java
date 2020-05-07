@@ -38,7 +38,7 @@ public class ControllerSettings {
 
     @FXML
     public void initialize() {
-        this.currentDirectory.setText(((Path)Objects.requireNonNull(getPath())).toString());
+        this.currentDirectory.setText(Objects.requireNonNull(getPath()).toString());
         this.directory = this.currentDirectory.getText();
         this.buttonChoose.setOnAction(this::getExtractFile);
     }
@@ -53,7 +53,7 @@ public class ControllerSettings {
             }
 
             this.setNewPath(directory.toString());
-            this.currentDirectory.setText(((Path)Objects.requireNonNull(getPath())).toString());
+            this.currentDirectory.setText(Objects.requireNonNull(getPath()).toString());
             this.copyFile(directory.toString());
             this.directory = this.currentDirectory.getText();
         }
@@ -67,8 +67,8 @@ public class ControllerSettings {
             Platform.runLater(() -> {
                 Main.stage.setScene(new Scene(root));
             });
-        } catch (IOException var3) {
-            var3.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -83,8 +83,8 @@ public class ControllerSettings {
             j.put("pos", str);
             File f = new File("json.json");
             Files.write(Paths.get(f.getPath()), file.toString().getBytes(), new OpenOption[0]);
-        } catch (ParseException | IOException var7) {
-            var7.printStackTrace();
+        } catch (ParseException | IOException e) {
+            e.printStackTrace();
         }
 
     }

@@ -35,8 +35,8 @@ public class ControllerMenu {
                 });
                 stageAdd.show();
             }
-        } catch (IOException var4) {
-            var4.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -57,8 +57,8 @@ public class ControllerMenu {
                 });
                 stageShow.show();
             }
-        } catch (IOException var3) {
-            var3.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -80,8 +80,8 @@ public class ControllerMenu {
                 });
                 stageAbout.show();
             }
-        } catch (IOException var3) {
-            var3.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }
@@ -95,8 +95,8 @@ public class ControllerMenu {
                 Main.stage.setWidth(600.0D);
                 Main.stage.setHeight(430.0D);
             });
-        } catch (IOException var3) {
-            var3.printStackTrace();
+        } catch (IOException e) {
+            e.printStackTrace();
         }
 
     }

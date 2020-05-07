@@ -11,14 +11,13 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
+import java.nio.file.FileStore;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.time.LocalDate;
-import java.time.chrono.ChronoLocalDate;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.HashSet;
@@ -44,7 +43,6 @@ import javafx.scene.control.ScrollPane;
 import javafx.scene.control.TextArea;
 import javafx.scene.control.TextField;
 import javafx.scene.image.Image;
-import javafx.scene.image.WritableImage;
 import javafx.scene.input.DragEvent;
 import javafx.scene.input.KeyCode;
 import javafx.scene.input.MouseButton;
@@ -56,6 +54,9 @@ import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javax.swing.Icon;
 import javax.swing.filechooser.FileSystemView;
+
+
+import java.nio.file.Files;
 
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FileUtils;
@@ -331,8 +332,8 @@ public class ControllerView {
                 JSONObject object = new JSONObject(this.getFile(event.getDragboard().getString()).toString());
                 String name = object.getString("name");
                 this.dropFile(name);
-            } catch (Exception var4) {
-                System.out.println(var4.getMessage());
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
         } else {
             this.dropListOfFile();
@@ -356,7 +357,7 @@ public class ControllerView {
             for (File f : codeFiles){
                 if (f.getName().equals(name)) {
                     this.codeFilesExtract.add(new File(f.getFile(), f.getImage(), this));
-                    ((File)this.codeFilesExtract.get(this.codeFilesExtract.size() - 1)).setContainer("extract");
+                    this.codeFilesExtract.get(this.codeFilesExtract.size() - 1).setContainer("extract");
                     this.showExtractFile.getChildren().add(((File)this.codeFilesExtract.get(this.codeFilesExtract.size() - 1)).getFlowPane());
                     break;
                 }
@@ -749,7 +750,7 @@ public class ControllerView {
 
     public java.io.File getExtractFile() {
         FileChooser fileChooser = new FileChooser();
-        java.io.File file = fileChooser.showOpenDialog(ControllerMenu.stageShow);
+        java.io.File file = fileChooser.showSaveDialog(ControllerMenu.stageShow);
         if (file != null) {
             java.io.File directory = new java.io.File(file.getParent() + "\\" + FilenameUtils.removeExtension(file.getName()));
             if (!directory.exists()) {
