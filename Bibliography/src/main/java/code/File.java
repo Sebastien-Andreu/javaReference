@@ -1,85 +1,135 @@
 package code;
 
-import javafx.application.Platform;
+import code.controller.ControllerMenu;
+import code.controller.ControllerView;
+import code.database.DatabaseView;
+import code.json.JsonReader;
+import code.singleton.SingletonController;
+import code.singleton.SingletonDatabase;
+import code.singleton.SingletonFileSelected;
+import java.io.ByteArrayOutputStream;
+import java.io.FileWriter;
+import java.io.IOException;
+import java.io.ObjectOutputStream;
+import java.io.PrintWriter;
+import java.io.Serializable;
+import java.nio.file.Path;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.Iterator;
+import java.util.List;
+import java.util.Map;
+
+import javafx.fxml.FXMLLoader;
 import javafx.geometry.Orientation;
 import javafx.geometry.Pos;
 import javafx.scene.Cursor;
 import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
 import javafx.scene.SnapshotParameters;
 import javafx.scene.control.Label;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
+import javafx.scene.image.WritableImage;
 import javafx.scene.input.ClipboardContent;
 import javafx.scene.input.Dragboard;
-import javafx.scene.input.MouseEvent;
+import javafx.scene.input.KeyCode;
+import javafx.scene.input.MouseButton;
 import javafx.scene.input.TransferMode;
+import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.FlowPane;
 import javafx.scene.paint.Color;
 import javafx.scene.transform.Transform;
-import org.apache.commons.io.FilenameUtils;
-import singleton.SingletonController;
-import singleton.SingletonDatabase;
 
-import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Path;
-import java.nio.file.Paths;
-import java.time.LocalDate;
-import java.util.ArrayList;
-import java.util.Base64;
-import java.util.List;
-
-public class File implements Serializable{
-
-
+public class File implements Serializable {
     private java.io.File file;
-    private String name;
-    public String container;
-    private Image image;
+    public Image image;
     private FlowPane flowPane;
+    private ControllerView controller;
+    private DatabaseView databaseView;
+    public String name;
+    public String container;
+    public String title;
+    public String author;
+    public String date;
+    public String theme;
+    public String typeOfDocument;
+    public String extension;
+    public List<String> tags = new ArrayList();
+    public Map<String, String> additionalMap = null;
+    public Map<String, String> firstMap = null;
 
-    public String title, author, date, theme, typeOfDocument, extension;
-    public List<String> tags= new ArrayList<>(), notes= new ArrayList<>(), quotes = new ArrayList<>();
-
-    public File(java.io.File file, Image image){
+    public File(java.io.File file, Image image, ControllerView controller) {
         this.file = file;
         this.name = file.getName();
         this.image = image;
-        setFlowPane();
+        this.controller = controller;
+        this.databaseView = new DatabaseView();
+        this.setFlowPane();
     }
 
-    private void setFlowPane(){
+    private void setFlowPane() {
         this.flowPane = new FlowPane();
         this.flowPane.setOrientation(Orientation.HORIZONTAL);
         ImageView img = new ImageView();
-        img.setFitHeight(25);
-        img.setFitWidth(25);
+        img.setFitHeight(25.0D);
+        img.setFitWidth(25.0D);
         img.setImage(this.image);
         Label label = new Label(this.name);
         label.setAlignment(Pos.CENTER);
-
-        this.flowPane.setOnMouseEntered(e -> {
+        this.flowPane.setOnMouseEntered((e) -> {
             this.flowPane.setCursor(Cursor.HAND);
         });
+        this.flowPane.setOnMouseClicked((e) -> {
+            if (e.getButton() == MouseButton.PRIMARY && this.controller.pressedKeys.contains(KeyCode.CONTROL)) {
+                if (this.container.equals("file")) {
+                    if (!this.controller.listOfSelectedExtractFile.contains(this)) {
+                        this.flowPane.setStyle("-fx-background-color: #AE8B67;-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent #AE8B67 transparent;");
+                        this.controller.listOfSelectedExtractFile.add(this);
+                    } else {
+                        this.controller.listOfSelectedExtractFile.remove(this);
+                        this.flowPane.setStyle("-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent lightgrey transparent;");
+                    }
 
-        flowPane.setOnMouseClicked(this::onClickListenerShowDetails);
+                    for (File f : this.controller.codeFilesExtract){
+                        f.resetStyle();
+                    }
+                }
 
+                if (this.container.equals("extract")) {
+                    if (!this.controller.listOfSelectedRemoveExtractFile.contains(this)) {
+                        this.flowPane.setStyle("-fx-background-color: #AE8B67;-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent #AE8B67 transparent;");
+                        this.controller.listOfSelectedRemoveExtractFile.add(this);
+                    } else {
+                        this.controller.listOfSelectedRemoveExtractFile.remove(this);
+                        this.flowPane.setStyle("-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent lightgrey transparent;");
+                    }
+
+                    for (File f : this.controller.codeFiles){
+                        f.resetStyle();
+                    }
+                }
+            } else {
+                this.controller.listOfSelectedExtractFile.clear();
+                this.showView();
+            }
+
+        });
         this.flowPane.setStyle("-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent lightgrey transparent;");
-
         this.flowPane.getChildren().addAll(img, label);
-
-        this.flowPane.setOnDragDetected(e -> {
+        this.flowPane.setOnDragDetected((e) -> {
             Dragboard db = this.flowPane.startDragAndDrop(TransferMode.ANY);
-            SnapshotParameters sp =  new SnapshotParameters();
+            SnapshotParameters sp = new SnapshotParameters();
             sp.setFill(Color.TRANSPARENT);
-            sp.setTransform(Transform.scale(1.5,1.5));
-            db.setDragView(this.flowPane.snapshot(sp, null));
-
+            sp.setTransform(Transform.scale(1.5D, 1.5D));
+            db.setDragView(this.flowPane.snapshot(sp, (WritableImage)null));
             ClipboardContent cb = new ClipboardContent();
+
             try {
                 cb.putString(toString(this.toString()));
-            } catch (IOException ex) {
-                ex.printStackTrace();
+            } catch (IOException var6) {
+                var6.printStackTrace();
             }
 
             db.setContent(cb);
@@ -87,129 +137,130 @@ public class File implements Serializable{
         });
     }
 
-    private void onClickListenerShowDetails(MouseEvent event) {
-        showView();
+    public void getData() {
+        JsonReader jsonReader = new JsonReader();
+        this.firstMap = jsonReader.read(this.name);
+        SingletonFileSelected.getInstance().file = this;
+        SingletonDatabase.getInstance().IDSelected = Integer.parseInt((String)this.firstMap.get("ID"));
+        SingletonFileSelected.getInstance().image = this.image;
+        SingletonFileSelected.getInstance().title = this.name;
+        this.additionalMap = SingletonController.getInstance().templateController.getData();
     }
 
-    public void showView(){
-        setSize();
-        SingletonDatabase.getInstance().setDetailsOfFile(this);
-        SingletonController.getInstance().getController().tags.clear();
-        SingletonController.getInstance().getController().notes.clear();
-        SingletonController.getInstance().getController().quotes.clear();
+    public void showView() {
+        this.getData();
+        this.setSize();
+        SingletonController.getInstance().setFile(this);
+        this.databaseView.setDetailsOfFile(this);
+        this.controller.tags.clear();
+        String list = this.firstMap.get("keyWord").replace("\"", "").replace("[", "").replace("]", "");
+        String[] ary = list.split(",");
 
-        for (String str : this.tags) {
-            SingletonController.getInstance().getController().tags.add(str);
+        for(String str : ary){
+            this.controller.tags.add(str);
         }
 
-        SingletonController.getInstance().getController().quotes.addAll(this.quotes);
-        SingletonController.getInstance().getController().notes.addAll(this.notes);
-        SingletonController.getInstance().getController().detailsName.setText(this.name);
-        SingletonController.getInstance().getController().detailsTitle.setText(this.title);
-        SingletonController.getInstance().getController().detailsAuthor.setText(this.author);
-        SingletonController.getInstance().getController().detailsDate.setText(this.date);
-        SingletonController.getInstance().getController().detailsTheme.setText(this.theme);
-        SingletonController.getInstance().getController().detailsTypeOfDocument.setText(this.typeOfDocument);
-
-        SingletonController.getInstance().getController().modifyDetails.setOnAction(e -> {
-            SingletonController.getInstance().getController().rootView.setVisible(false);
-            SingletonController.getInstance().getController().rootSearch.setVisible(false);
-            SingletonController.getInstance().getController().rootAdd.setVisible(true);
-            SingletonController.getInstance().getController().buttonAddFile.setVisible(false);
-            SingletonController.getInstance().getController().buttonUpdateFile.setVisible(true);
-            SingletonController.getInstance().getController().labelAddFile.setVisible(false);
-
-            SingletonController.getInstance().getController().addTags.clear();
-            SingletonController.getInstance().getController().addQuotes.clear();
-            SingletonController.getInstance().getController().addNotes.clear();
-            SingletonController.getInstance().getController().themeAdd.getItems().clear();
-            SingletonController.getInstance().getController().typeOfDocumentAdd.getItems().clear();
-
-            SingletonController.getInstance().getController().themeAdd.getItems().addAll(SingletonDatabase.getInstance().getAllTheme());
-            SingletonController.getInstance().getController().typeOfDocumentAdd.getItems().addAll(SingletonDatabase.getInstance().getAllTypeOfDocument());
-
-            for (String str : this.tags) {
-                SingletonController.getInstance().getController().addTags.add(str);
+        this.controller.detailsName.setText(this.firstMap.get("name"));
+        this.controller.detailsTitle.setText(this.firstMap.get("title"));
+        this.controller.detailsAuthor.setText(this.firstMap.get("Author"));
+        this.controller.detailsDate.setText(this.firstMap.get("date"));
+        this.controller.detailsTheme.setText(this.firstMap.get("theme").replace("[", "").replace("]", "").replace("\"", "").replace(",", ", "));
+        this.controller.detailsTypeOfDocument.setText(this.firstMap.get("typeOfDocument"));
+        this.controller.showNote.setText(this.firstMap.get("note"));
+        this.controller.showQuote.setText(this.firstMap.get("quote"));
+        AnchorPane pane = SingletonController.getInstance().templateController.loadView();
+        this.controller.showAdditional.getChildren().clear();
+        this.controller.showAdditional.getChildren().addAll(pane);
+        this.controller.showOtherDetails.setLayoutY(this.controller.otherInputDefaultValueY);
+        this.controller.showOtherDetails.setLayoutY(pane.getPrefHeight() + this.controller.showAdditional.getLayoutY());
+        this.controller.detailsName.setOnMouseEntered((e) -> {
+            this.controller.detailsName.setCursor(Cursor.HAND);
+        });
+        this.controller.detailsName.setOnMouseExited((e) -> {
+            this.controller.detailsName.setCursor(Cursor.DEFAULT);
+        });
+        this.controller.modifyDetails.setOnAction((e) -> {
+            try {
+                Parent root = FXMLLoader.load(ClassLoader.getSystemResource("xml/view_add.fxml"));
+                ControllerMenu.stageShow.setScene(new Scene(root));
+            } catch (IOException var2) {
+                var2.printStackTrace();
             }
-            SingletonController.getInstance().getController().addQuotes.addAll(this.quotes);
-            SingletonController.getInstance().getController().addNotes.addAll(this.notes);
-            SingletonController.getInstance().getController().showIcon.setImage(this.image);
-            SingletonController.getInstance().getController().titleOfImportFileAdd.setText(this.name);
-            SingletonController.getInstance().getController().titleAdd.setText(this.title);
-            SingletonController.getInstance().getController().authorAdd.setText(this.author);
-            SingletonController.getInstance().getController().dateAdd.setValue(LocalDate.parse(this.date));
-            SingletonController.getInstance().getController().themeAdd.setValue(this.theme);
-            SingletonController.getInstance().getController().typeOfDocumentAdd.setValue(this.typeOfDocument);
-            Platform.runLater( () -> SingletonController.getInstance().getController().rootAdd.requestFocus() );
+
         });
     }
 
-    private void setSize(){
-        double widthMinSize = 268;
-        SingletonController.getInstance().getController().anchorPaneFile.setMinWidth(widthMinSize);
-        SingletonController.getInstance().getController().scrollShowFile.setMinWidth(widthMinSize);
-        SingletonController.getInstance().getController().showFile.setMinWidth(widthMinSize - 6);
-
-        SingletonController.getInstance().getController().anchorPaneExtractFile.setMinWidth(widthMinSize);
-        SingletonController.getInstance().getController().scrollExtractFile.setMinWidth(widthMinSize);
-        SingletonController.getInstance().getController().showExtractFile.setMinWidth(widthMinSize - 6);
-        SingletonController.getInstance().getController().hBoxExtractFile.setMinWidth(widthMinSize);
-
-        SingletonController.getInstance().getController().anchorPaneDetails.setVisible(true);
-        SingletonController.getInstance().getController().modifyDetails.setVisible(true);
-        SingletonController.getInstance().getController().buttonEdit.setVisible(true);
+    private void setSize() {
+        double widthMinSize = 270.0D;
+        this.controller.anchorPaneFile.setMinWidth(widthMinSize);
+        this.controller.scrollShowFile.setMinWidth(widthMinSize);
+        this.controller.showFile.setMinWidth(widthMinSize - 2.0D);
+        this.controller.anchorPaneExtractFile.setMinWidth(widthMinSize);
+        this.controller.scrollExtractFile.setMinWidth(widthMinSize);
+        this.controller.showExtractFile.setMinWidth(widthMinSize - 2.0D);
+        this.controller.hBoxExtractFile.setMinWidth(widthMinSize);
+        this.controller.showDetails.setVisible(true);
+        this.controller.modifyDetails.setVisible(true);
+        this.controller.buttonEdit.setVisible(true);
     }
 
-    public void createFileWithData(java.io.File directory){
-        SingletonDatabase.getInstance().setDetailsOfFile(this);
+    public void extractMetadata(Path path) {
+        this.databaseView.setDetailsOfFile(this);
 
-        String fileNameWithOutExt = FilenameUtils.removeExtension(this.name);
+        try {
+            PrintWriter writer = new PrintWriter(new FileWriter(String.valueOf(path), true));
 
-        Path path = Paths.get(directory.getAbsolutePath() + "\\" + fileNameWithOutExt + ".txt");
+            try {
+                writer.println("Title : " + this.title);
+                writer.println("Author : " + this.author);
+                writer.println("Date : " + this.date);
+                writer.println("Theme : " + this.theme);
+                writer.println("Type of document : " + this.typeOfDocument);
+                writer.println("Extension : " + this.extension);
+                writer.println("");
+                writer.println("");
+                writer.write(SingletonController.getInstance().templateController.getStringToExtract());
+                writer.println("");
+                writer.println("");
+                writer.println("Key word :\t");
+                String[] ary = ((String)this.firstMap.get("keyWord")).replace("\"", "").replace("[", "").replace("]", "").split(",");
 
-        try (BufferedWriter writer = Files.newBufferedWriter(path)) {
-            writer.write("Title : " + this.title + '\n');
-            writer.write("Author : " + this.author + '\n');
-            writer.write("Date : " + this.date + '\n');
-            writer.write("Theme : " + this.theme + '\n');
-            writer.write("Type of document : " + this.typeOfDocument + '\n');
-            writer.write("Extension : " + this.extension + '\n');
-            writer.newLine();
-            writer.newLine();
-            writer.newLine();
-            if (!this.tags.isEmpty()){
-                writer.write("Key word :\n");
-                for (String str : this.tags){
+                for(String str : ary) {
                     writer.write("\t" + str);
                 }
+
+                writer.println("");
+                writer.println("");
+                writer.println("Note :");
+                writer.println(this.firstMap.get("note"));
+                writer.println("");
+                writer.println("");
+                writer.println("Quote :");
+                writer.println(this.firstMap.get("quote"));
+                writer.println("");
+                writer.println("");
+                writer.println("");
+                writer.println("-----------------------------------------------------------------------------------------------------------------------");
+                writer.println("");
+                writer.println("");
+            } catch (Exception e) {
+                System.out.println(e.getMessage());
             }
-            if (!this.notes.isEmpty()){
-                writer.write("Note :\n");
-                for (String str : this.notes){
-                    writer.write("\t" + str);
-                }
-            }
-            if (!this.quotes.isEmpty()){
-                writer.newLine();
-                writer.write("Quote :\n");
-                for (String str : this.quotes){
-                    writer.write("\t" + str);
-                }
-            }
-        } catch (IOException e) {
-            e.printStackTrace();
+        } catch (Exception var18) {
+            System.out.println(var18.getMessage());
         }
+
     }
 
-    public FlowPane getFlowPane(){
+    public FlowPane getFlowPane() {
         return this.flowPane;
     }
 
-    public String getName(){
+    public String getName() {
         return this.name;
     }
 
-    public java.io.File getFile(){
+    public java.io.File getFile() {
         return this.file;
     }
 
@@ -217,43 +268,34 @@ public class File implements Serializable{
         return this.image;
     }
 
-    public void removeInExtractFile(){
-        for (Node node: SingletonController.getInstance().getController().showExtractFile.getChildren()){
-            if (node.getClass().equals(FlowPane.class)){
-                if (node == this.flowPane){
-                    SingletonController.getInstance().getController().showExtractFile.getChildren().remove(this.flowPane);
-                    SingletonController.getInstance().getController().codeFilesExtract.remove(this);
-                }
+    public void removeInExtractFile() {
+        for (Node node : this.controller.showExtractFile.getChildren()){
+            if (node.getClass().equals(FlowPane.class) && node == this.flowPane) {
+                this.controller.codeFilesExtract.remove(this);
+                this.controller.showExtractFile.getChildren().remove(this.flowPane);
+                break;
             }
         }
+
     }
 
-    public void removeInCodeFile(){
-        for (Node node: SingletonController.getInstance().getController().showFile.getChildren()){
-            if (node.getClass().equals(FlowPane.class)){
-                if (node == this.flowPane){
-                    SingletonController.getInstance().getController().showFile.getChildren().remove(this.flowPane);
-                    SingletonController.getInstance().getController().codeFiles.remove(this);
-                }
-            }
-        }
-    }
-
-    public void setContainer(String container){
+    public void setContainer(String container) {
         this.container = container;
     }
 
-    @Override
     public String toString() {
-        return "{ \"name\":\"" + name + '\"' +
-                ", \"container\":\"" + container +"\"}";
+        return "{ \"name\":\"" + this.name + '"' + ", \"container\":\"" + this.container + "\"}";
     }
 
-    private static String toString(Serializable o ) throws IOException {
+    private static String toString(Serializable o) throws IOException {
         ByteArrayOutputStream baos = new ByteArrayOutputStream();
         ObjectOutputStream oos = new ObjectOutputStream(baos);
         oos.writeObject(o);
         oos.close();
         return Base64.getEncoder().encodeToString(baos.toByteArray());
+    }
+
+    public void resetStyle() {
+        this.flowPane.setStyle("-fx-border-width: 1;-fx-padding: 5 5 5 5; -fx-border-color: transparent transparent lightgrey transparent;");
     }
 }
