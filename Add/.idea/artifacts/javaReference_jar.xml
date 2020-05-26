@@ -1,8 +1,0 @@
-<component name="ArtifactManager">
-  <artifact type="jar" name="javaReference:jar">
-    <output-path>$PROJECT_DIR$/out/artifacts/javaReference_jar</output-path>
-    <root id="archive" name="javaReference.jar">
-      <element id="module-output" name="javaReference" />
-    </root>
-  </artifact>
-</component>
