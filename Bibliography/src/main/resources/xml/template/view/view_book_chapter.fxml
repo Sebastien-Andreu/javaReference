@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="524.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewBookChapter">
+    <children>
+        <Label fx:id="showName" layoutX="17.0" layoutY="18.0" prefHeight="17.0" prefWidth="70.0" style="-fx-font-weight: bold;" text="Book title :" />
+        <Label fx:id="showLabelAff" layoutX="7.0" layoutY="247.0" text="Author :" />
+        <ScrollPane cache="true" layoutX="8.0" layoutY="267.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
+            <content>
+                <FlowPane fx:id="showAuthor" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="547.0" rowValignment="TOP" vgap="5.0" />
+            </content>
+        </ScrollPane>
+        <Label fx:id="showOrg" layoutX="17.0" layoutY="47.0" prefHeight="17.0" prefWidth="50.0" style="-fx-font-weight: bold;" text="Editor :" />
+        <Label fx:id="showPlace" layoutX="17.0" layoutY="76.0" prefHeight="17.0" prefWidth="80.0" style="-fx-font-weight: bold;" text="Book series :" />
+        <Label fx:id="showCode" layoutX="17.0" layoutY="106.0" prefHeight="17.0" prefWidth="43.0" style="-fx-font-weight: bold;" text="ISBN :" />
+        <Label fx:id="showRef" layoutX="17.0" layoutY="136.0" prefHeight="17.0" prefWidth="59.0" style="-fx-font-weight: bold;" text="Edition :" />
+        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="401.0" prefHeight="113.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
+        <Label fx:id="showLabelComment" layoutX="7.0" layoutY="380.0" text="Comment :" />
+        <Label fx:id="title" layoutX="88.0" layoutY="18.0" prefHeight="17.0" prefWidth="436.0" text="" />
+        <Label fx:id="editor" layoutX="68.0" layoutY="47.0" prefHeight="17.0" prefWidth="423.0" text="" />
+        <Label fx:id="series" layoutX="94.0" layoutY="76.0" prefHeight="17.0" prefWidth="423.0" text="" />
+        <Label fx:id="isbn" layoutX="62.0" layoutY="106.0" prefHeight="17.0" prefWidth="436.0" text="" />
+        <Label fx:id="edition" layoutX="67.0" layoutY="136.0" prefHeight="17.0" prefWidth="436.0" text="" />
+      <Label fx:id="showCode1" layoutX="17.0" layoutY="166.0" prefHeight="17.0" prefWidth="70.0" style="-fx-font-weight: bold;" text="Publisher :" />
+      <Label fx:id="showRef1" layoutX="17.0" layoutY="196.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Publisher office :" />
+      <Label fx:id="publisher" layoutX="87.0" layoutY="166.0" prefHeight="17.0" prefWidth="423.0" text="" />
+      <Label fx:id="publisherOffice" layoutX="119.0" layoutY="196.0" prefHeight="17.0" prefWidth="382.0" text="" />
+    </children>
+</AnchorPane>

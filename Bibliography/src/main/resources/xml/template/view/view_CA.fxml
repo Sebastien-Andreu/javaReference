@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="454.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewCA">
+   <children>
+       <Label fx:id="showName" layoutX="17.0" layoutY="18.0" prefHeight="17.0" prefWidth="107.0" style="-fx-font-weight: bold;" text="Conference name :" />
+       <Label fx:id="showLabelAff" layoutX="7.0" layoutY="182.0" text="Affiliation :" />
+       <ScrollPane cache="true" layoutX="8.0" layoutY="202.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
+           <content>
+               <FlowPane fx:id="showAff" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="547.0" rowValignment="TOP" vgap="5.0" />
+           </content>
+       </ScrollPane>
+      <Label fx:id="showOrg" layoutX="17.0" layoutY="47.0" prefHeight="17.0" prefWidth="149.0" style="-fx-font-weight: bold;" text="Conference organization :" />
+      <Label fx:id="showPlace" layoutX="17.0" layoutY="76.0" prefHeight="17.0" prefWidth="107.0" style="-fx-font-weight: bold;" text="Conference place :" />
+      <Label fx:id="showCode" layoutX="17.0" layoutY="106.0" prefHeight="17.0" prefWidth="70.0" style="-fx-font-weight: bold;" text="Paper code :" />
+      <Label fx:id="showRef" layoutX="17.0" layoutY="136.0" prefHeight="17.0" prefWidth="107.0" style="-fx-font-weight: bold;" text="Online reference :" />
+      <TextArea fx:id="comment" layoutX="8.0" layoutY="336.0"  editable="false" prefHeight="113.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
+      <Label fx:id="showLabelComment" layoutX="7.0" layoutY="315.0" text="Comment :" />
+      <Label fx:id="name" layoutX="130.0" layoutY="18.0" text="" />
+      <Label fx:id="org" layoutX="170.0" layoutY="47.0" text="" />
+      <Label fx:id="place" layoutX="130.0" layoutY="76.0" text="" />
+      <Label fx:id="code" layoutX="96.0" layoutY="106.0" text="" />
+      <Label fx:id="ref" layoutX="128.0" layoutY="136.0" text="" />
+   </children>
+</AnchorPane>
