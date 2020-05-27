@@ -157,6 +157,10 @@ public abstract class Database {
         String importStandard = "INSERT INTO TypeOfDocument (name) VALUES(\"Standard\")";
         String importPatent = "INSERT INTO TypeOfDocument (name) VALUES(\"Patent\")";
         String importTechnicalReport = "INSERT INTO TypeOfDocument (name) VALUES(\"Technical report\")";
+        String importPhdThesis = "INSERT INTO TypeOfDocument (name) VALUES(\"PhD Thesis\")";
+        String importMscThesis = "INSERT INTO TypeOfDocument (name) VALUES(\"MSc Thesis\")";
+        String importLectureNote = "INSERT INTO TypeOfDocument (name) VALUES(\"Lecture note\")";
+
         String author = "CREATE TABLE \"Author\" (\n\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n\t\"author\"\tREAL NOT NULL\n)";
 
         try (Connection conn = DriverManager.getConnection(url); Statement stmt = conn.createStatement()){
@@ -172,6 +176,9 @@ public abstract class Database {
             stmt.execute(importStandard);
             stmt.execute(importPatent);
             stmt.execute(importTechnicalReport);
+            stmt.execute(importPhdThesis);
+            stmt.execute(importMscThesis);
+            stmt.execute(importLectureNote);
         } catch (SQLException var41) {
             System.out.println(var41.getMessage());
         }

@@ -229,6 +229,9 @@ public class ControllerAddFile {
     private void setComboBox() {
         this.inputTheme.getItems().clear();
         this.inputTypeOfDocument.getItems().clear();
+        this.inputAuthor.getItems().clear();
+        this.inputAuthor.getEditor().clear();
+        this.inputKeyWord.getItems().clear();
 
         this.inputTheme.getItems().addAll(SingletonDatabase.getInstance().getAllTheme());
         this.inputTypeOfDocument.getItems().addAll(SingletonDatabase.getInstance().getAllTypeOfDocument());
@@ -482,20 +485,12 @@ public class ControllerAddFile {
         this.AvailabilityPrint.selectedProperty().setValue(false);
         this.AvailabilityLib.selectedProperty().setValue(false);
         this.AvailabilityElec.selectedProperty().setValue(false);
-        this.inputTheme.getItems().clear();
-        this.inputTypeOfDocument.getItems().clear();
-        this.inputAuthor.getItems().clear();
-        this.inputKeyWord.getItems().clear();
-        this.inputTheme.getItems().addAll(SingletonDatabase.getInstance().getAllTheme());
-        this.inputTypeOfDocument.getItems().addAll(SingletonDatabase.getInstance().getAllTypeOfDocument());
-        this.inputAuthor.getItems().addAll(SingletonDatabase.getInstance().getAllAuthor());
-        this.inputKeyWord.getItems().addAll(SingletonDatabase.getInstance().getAllKeyWord());
+
+        setComboBox();
     }
 
     public void handleDragOverAdd(DragEvent e) {
-        if (SingletonFileSelected.getInstance().file == null) {
-            e.acceptTransferModes(TransferMode.ANY);
-        } else if (!SingletonFileSelected.getInstance().file.firstMap.get("name").equals("Not available") && e.getDragboard().hasFiles()) {
+        if (e.getDragboard().hasFiles()) {
             e.acceptTransferModes(TransferMode.ANY);
         }
 

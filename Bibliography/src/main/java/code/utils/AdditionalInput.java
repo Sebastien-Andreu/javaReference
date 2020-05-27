@@ -27,6 +27,15 @@ public class AdditionalInput {
             case "Technical report":
                 result = "xml/template/add/add_technical_report.fxml";
                 break;
+            case "PhD Thesis":
+                result = "xml/template/add/add_phd_thesis.fxml";
+                break;
+            case "MSc Thesis":
+                result = "xml/template/add/add_msc_thesis.fxml";
+                break;
+            case "Lecture note":
+                result = "xml/template/add/add_lecture_note.fxml";
+                break;
         }
         return result;
     }
@@ -54,6 +63,15 @@ public class AdditionalInput {
                 break;
             case "Technical report":
                 SingletonController.getInstance().templateController = new ControllerTechnicalReport();
+                break;
+            case "PhD Thesis":
+                SingletonController.getInstance().templateController = new ControllerPhdThesis();
+                break;
+            case "MSc Thesis":
+                SingletonController.getInstance().templateController = new ControllerMscThesis();
+                break;
+            case "Lecture note":
+                SingletonController.getInstance().templateController = new ControllerLectureNote();
                 break;
         }
     }

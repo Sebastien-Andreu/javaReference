@@ -247,6 +247,7 @@ public class ControllerPatent implements TemplateController {
                     String[] ary = list.split(",");
                     String[] var4 = ary;
                     int var5 = ary.length;
+                    result[0].add("Author : " + '\n');
                     for(int var6 = 0; var6 < var5; ++var6) {
                         String str = var4[var6];
                         result[0].add(str + "\n");
@@ -257,6 +258,7 @@ public class ControllerPatent implements TemplateController {
                     String[] ary2 = list2.split(",");
                     String[] var42 = ary2;
                     int var52 = ary2.length;
+                    result[0].add("Affiliation : " + '\n');
                     for(int var6 = 0; var6 < var52; ++var6) {
                         String str = var42[var6];
                         result[0].add(str + "\n");

@@ -39,6 +39,5 @@ public class AutoIncrement {
                 System.out.println(var2.getMessage());
             }
         }
-
     }
 }

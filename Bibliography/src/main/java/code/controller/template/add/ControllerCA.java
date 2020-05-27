@@ -223,6 +223,7 @@ public class ControllerCA implements TemplateController {
                     String[] ary = list.split(",");
                     String[] var4 = ary;
                     int var5 = ary.length;
+                    result[0].add("Affiliation : " + '\n');
                     for(int var6 = 0; var6 < var5; ++var6) {
                         String str = var4[var6];
                         result[0].add(str + "\n");
@@ -263,7 +264,6 @@ public class ControllerCA implements TemplateController {
                     String[] ary = list.split(",");
                     String[] var3 = ary;
                     int var4 = ary.length;
-
                     for(int var5 = 0; var5 < var4; ++var5) {
                         String str = var3[var5];
                         this.addAffiliation.add(str);
