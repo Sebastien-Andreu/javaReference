@@ -19,9 +19,8 @@ public class ControllerViewMscThesis {
     public Label title, reportRef, onlineRef;
 
     @FXML
-    public FlowPane showAff, showAuthor;
+    public FlowPane showAff;
 
-    public ObservableList<String> addAuthor = FXCollections.observableArrayList();
     public ObservableList<String> addAffiliation = FXCollections.observableArrayList();
 
     @FXML
@@ -50,15 +49,6 @@ public class ControllerViewMscThesis {
                         this.addAffiliation.add(str);
                     }
                     break;
-                case "author":
-                    String list2 = (SingletonController.getInstance().templateController.map.get("author")).replace("\"", "").replace("[", "").replace("]", "");
-                    String[] ary2 = list2.split(",");
-                    this.addAuthor.addListener(this::eventListenerAuthor);
-
-                    for(String str: ary2) {
-                        this.addAuthor.add(str);
-                    }
-                    break;
             }
         });
     }
@@ -75,22 +65,6 @@ public class ControllerViewMscThesis {
 
             if (change.wasRemoved()) {
                 this.showAff.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
-            }
-        }
-    }
-
-    private void eventListenerAuthor(ListChangeListener.Change<? extends String> change) {
-        while(change.next()) {
-            if (change.wasAdded()) {
-                Button result = new Button((String)this.addAuthor.get(this.addAuthor.size() - 1));
-                result.setPrefHeight(20.0D);
-                result.setContentDisplay(ContentDisplay.RIGHT);
-                result.setStyle("-fx-padding: 5 5 5 5");
-                this.showAuthor.getChildren().add(result);
-            }
-
-            if (change.wasRemoved()) {
-                this.showAuthor.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
             }
         }
     }

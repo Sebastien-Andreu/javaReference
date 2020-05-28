@@ -71,7 +71,7 @@ public abstract class Database {
     }
 
     public ArrayList<String> getAllTheme() {
-        String query2 = "select name from Theme";
+        String query2 = "select name from Theme order by name";
         ArrayList list = new ArrayList();
 
         try (Connection conn = connect();Statement stmt = conn.createStatement();ResultSet rs = stmt.executeQuery(query2)){
@@ -87,7 +87,7 @@ public abstract class Database {
     }
 
     public ArrayList<String> getAllTypeOfDocument() {
-        String query2 = "select name from TypeOfDocument";
+        String query2 = "select name from TypeOfDocument order by name";
         ArrayList list = new ArrayList();
 
         try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query2)){
@@ -104,7 +104,7 @@ public abstract class Database {
     }
 
     public ArrayList<String> getAllAuthor() {
-        String query2 = "select * from Author";
+        String query2 = "select * from Author order by author";
         ArrayList list = new ArrayList();
 
         try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query2)){
@@ -119,7 +119,7 @@ public abstract class Database {
     }
 
     public ArrayList<String> getAllKeyWord() {
-        String query2 = "select Key from KeyWord";
+        String query2 = "select Key from KeyWord order by Key";
         ArrayList list = new ArrayList();
 
         try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query2)){
@@ -159,6 +159,12 @@ public abstract class Database {
         String importTechnicalReport = "INSERT INTO TypeOfDocument (name) VALUES(\"Technical report\")";
         String importPhdThesis = "INSERT INTO TypeOfDocument (name) VALUES(\"PhD Thesis\")";
         String importMscThesis = "INSERT INTO TypeOfDocument (name) VALUES(\"MSc Thesis\")";
+        String importStudentReport = "INSERT INTO TypeOfDocument (name) VALUES(\"Student report\")";
+        String importAEGISReport = "INSERT INTO TypeOfDocument (name) VALUES(\"AEGIS report\")";
+        String importNewspaper = "INSERT INTO TypeOfDocument (name) VALUES(\"Newspaper\")";
+        String importOnlineArticle = "INSERT INTO TypeOfDocument (name) VALUES(\"Online article\")";
+        String importPressRelease = "INSERT INTO TypeOfDocument (name) VALUES(\"Press release\")";
+        String importSoftwareManual = "INSERT INTO TypeOfDocument (name) VALUES(\"Software manual\")";
         String importLectureNote = "INSERT INTO TypeOfDocument (name) VALUES(\"Lecture note\")";
 
         String author = "CREATE TABLE \"Author\" (\n\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n\t\"author\"\tREAL NOT NULL\n)";
@@ -179,6 +185,12 @@ public abstract class Database {
             stmt.execute(importPhdThesis);
             stmt.execute(importMscThesis);
             stmt.execute(importLectureNote);
+            stmt.execute(importStudentReport);
+            stmt.execute(importAEGISReport);
+            stmt.execute(importNewspaper);
+            stmt.execute(importOnlineArticle);
+            stmt.execute(importPressRelease);
+            stmt.execute(importSoftwareManual);
         } catch (SQLException var41) {
             System.out.println(var41.getMessage());
         }

@@ -227,6 +227,7 @@ public class ControllerAddFile {
     }
 
     private void setComboBox() {
+        System.out.println("clear");
         this.inputTheme.getItems().clear();
         this.inputTypeOfDocument.getItems().clear();
         this.inputAuthor.getItems().clear();

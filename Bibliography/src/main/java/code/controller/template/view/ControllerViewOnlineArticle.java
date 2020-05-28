@@ -11,16 +11,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.FlowPane;
 
-public class ControllerViewPhdThesis {
-
+public class ControllerViewOnlineArticle {
     @FXML
     public TextArea comment;
     @FXML
-    public Label title, reportRef, onlineRef;
+    public Label title, website, pubDate, accessDate ;
 
     @FXML
-    public FlowPane showAff;
+    public FlowPane showAff, showAuthor;
 
+    public ObservableList<String> addAuthor = FXCollections.observableArrayList();
     public ObservableList<String> addAffiliation = FXCollections.observableArrayList();
 
     @FXML
@@ -31,11 +31,14 @@ public class ControllerViewPhdThesis {
                 case "title":
                     this.title.setText(SingletonController.getInstance().templateController.map.get("title"));
                     break;
-                case "reportRef":
-                    this.reportRef.setText(SingletonController.getInstance().templateController.map.get("reportRef"));
+                case "website":
+                    this.website.setText(SingletonController.getInstance().templateController.map.get("website"));
                     break;
-                case "onlineRef":
-                    this.onlineRef.setText(SingletonController.getInstance().templateController.map.get("onlineRef"));
+                case "pubDate":
+                    this.pubDate.setText(SingletonController.getInstance().templateController.map.get("pubDate"));
+                    break;
+                case "accessDate":
+                    this.accessDate.setText(SingletonController.getInstance().templateController.map.get("accessDate"));
                     break;
                 case "comment":
                     this.comment.setText(SingletonController.getInstance().templateController.map.get("comment"));
@@ -47,6 +50,15 @@ public class ControllerViewPhdThesis {
 
                     for(String str: ary) {
                         this.addAffiliation.add(str);
+                    }
+                    break;
+                case "author":
+                    String list2 = (SingletonController.getInstance().templateController.map.get("author")).replace("\"", "").replace("[", "").replace("]", "");
+                    String[] ary2 = list2.split(",");
+                    this.addAuthor.addListener(this::eventListenerAuthor);
+
+                    for(String str: ary2) {
+                        this.addAuthor.add(str);
                     }
                     break;
             }
@@ -65,6 +77,22 @@ public class ControllerViewPhdThesis {
 
             if (change.wasRemoved()) {
                 this.showAff.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
+            }
+        }
+    }
+
+    private void eventListenerAuthor(ListChangeListener.Change<? extends String> change) {
+        while(change.next()) {
+            if (change.wasAdded()) {
+                Button result = new Button((String)this.addAuthor.get(this.addAuthor.size() - 1));
+                result.setPrefHeight(20.0D);
+                result.setContentDisplay(ContentDisplay.RIGHT);
+                result.setStyle("-fx-padding: 5 5 5 5");
+                this.showAuthor.getChildren().add(result);
+            }
+
+            if (change.wasRemoved()) {
+                this.showAuthor.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
             }
         }
     }

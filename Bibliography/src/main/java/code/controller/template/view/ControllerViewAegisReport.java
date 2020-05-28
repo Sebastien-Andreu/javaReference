@@ -11,17 +11,16 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.FlowPane;
 
-public class ControllerViewPhdThesis {
+public class ControllerViewAegisReport {
 
+    @FXML
+    public Label title, track, year;
     @FXML
     public TextArea comment;
     @FXML
-    public Label title, reportRef, onlineRef;
+    public FlowPane showAuthor;
 
-    @FXML
-    public FlowPane showAff;
-
-    public ObservableList<String> addAffiliation = FXCollections.observableArrayList();
+    public ObservableList<String> addAuthor = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -31,40 +30,40 @@ public class ControllerViewPhdThesis {
                 case "title":
                     this.title.setText(SingletonController.getInstance().templateController.map.get("title"));
                     break;
-                case "reportRef":
-                    this.reportRef.setText(SingletonController.getInstance().templateController.map.get("reportRef"));
+                case "track":
+                    this.track.setText(SingletonController.getInstance().templateController.map.get("track"));
                     break;
-                case "onlineRef":
-                    this.onlineRef.setText(SingletonController.getInstance().templateController.map.get("onlineRef"));
+                case "year":
+                    this.year.setText(SingletonController.getInstance().templateController.map.get("year"));
                     break;
                 case "comment":
                     this.comment.setText(SingletonController.getInstance().templateController.map.get("comment"));
                     break;
-                case "affiliation":
-                    String list = (SingletonController.getInstance().templateController.map.get("affiliation")).replace("\"", "").replace("[", "").replace("]", "");
-                    String[] ary = list.split(",");
-                    this.addAffiliation.addListener(this::eventListenerAffiliation);
+                case "author":
+                    String list2 = (SingletonController.getInstance().templateController.map.get("author")).replace("\"", "").replace("[", "").replace("]", "");
+                    String[] ary2 = list2.split(",");
+                    this.addAuthor.addListener(this::eventListenerAuthor);
 
-                    for(String str: ary) {
-                        this.addAffiliation.add(str);
+                    for(String str: ary2) {
+                        this.addAuthor.add(str);
                     }
                     break;
             }
         });
     }
 
-    private void eventListenerAffiliation(ListChangeListener.Change<? extends String> change) {
+    private void eventListenerAuthor(ListChangeListener.Change<? extends String> change) {
         while(change.next()) {
             if (change.wasAdded()) {
-                Button result = new Button((String)this.addAffiliation.get(this.addAffiliation.size() - 1));
+                Button result = new Button((String)this.addAuthor.get(this.addAuthor.size() - 1));
                 result.setPrefHeight(20.0D);
                 result.setContentDisplay(ContentDisplay.RIGHT);
                 result.setStyle("-fx-padding: 5 5 5 5");
-                this.showAff.getChildren().add(result);
+                this.showAuthor.getChildren().add(result);
             }
 
             if (change.wasRemoved()) {
-                this.showAff.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
+                this.showAuthor.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
             }
         }
     }

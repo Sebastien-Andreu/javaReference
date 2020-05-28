@@ -36,6 +36,24 @@ public class AdditionalInput {
             case "Lecture note":
                 result = "xml/template/add/add_lecture_note.fxml";
                 break;
+            case "Student report":
+                result = "xml/template/add/add_student_report.fxml";
+                break;
+            case "AEGIS report":
+                result = "xml/template/add/add_aegis_report.fxml";
+                break;
+            case "Newspaper":
+                result = "xml/template/add/add_newspaper.fxml";
+                break;
+            case "Online article":
+                result = "xml/template/add/add_online_article.fxml";
+                break;
+            case "Press release":
+                result = "xml/template/add/add_press_release.fxml";
+                break;
+            case "Software manual":
+                result = "xml/template/add/add_software_manual.fxml";
+                break;
         }
         return result;
     }
@@ -72,6 +90,24 @@ public class AdditionalInput {
                 break;
             case "Lecture note":
                 SingletonController.getInstance().templateController = new ControllerLectureNote();
+                break;
+            case "Student report":
+                SingletonController.getInstance().templateController = new ControllerStudentReport();
+                break;
+            case "AEGIS report":
+                SingletonController.getInstance().templateController = new ControllerAegisReport();
+                break;
+            case "Newspaper":
+                SingletonController.getInstance().templateController = new ControllerNewspaper();
+                break;
+            case "Online article":
+                SingletonController.getInstance().templateController = new ControllerOnlineArticle();
+                break;
+            case "Press release":
+                SingletonController.getInstance().templateController = new ControllerPressRelease();
+                break;
+            case "Software manual":
+                SingletonController.getInstance().templateController = new ControllerSoftwareManual();
                 break;
         }
     }

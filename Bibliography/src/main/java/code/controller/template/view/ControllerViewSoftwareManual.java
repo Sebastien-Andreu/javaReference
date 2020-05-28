@@ -11,12 +11,12 @@ import javafx.scene.control.Label;
 import javafx.scene.control.TextArea;
 import javafx.scene.layout.FlowPane;
 
-public class ControllerViewPhdThesis {
+public class ControllerViewSoftwareManual {
 
     @FXML
     public TextArea comment;
     @FXML
-    public Label title, reportRef, onlineRef;
+    public Label title, onlineRef;
 
     @FXML
     public FlowPane showAff;
@@ -30,9 +30,6 @@ public class ControllerViewPhdThesis {
             switch (e.toString()){
                 case "title":
                     this.title.setText(SingletonController.getInstance().templateController.map.get("title"));
-                    break;
-                case "reportRef":
-                    this.reportRef.setText(SingletonController.getInstance().templateController.map.get("reportRef"));
                     break;
                 case "onlineRef":
                     this.onlineRef.setText(SingletonController.getInstance().templateController.map.get("onlineRef"));
