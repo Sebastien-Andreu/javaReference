@@ -7,9 +7,9 @@
     <children>
         <Label layoutX="29.0" layoutY="18.0" prefHeight="17.0" prefWidth="70.0" text="Title :" />
         <TextField fx:id="title" layoutX="64.0" layoutY="14.0" prefHeight="25.0" prefWidth="283.0" />
-        <TextArea fx:id="comment" layoutX="29.0" layoutY="79.0" prefHeight="155.0" prefWidth="874.0" wrapText="true" />
-        <Label layoutX="29.0" layoutY="58.0" text="Comment :" />
         <Label layoutX="426.0" layoutY="18.0" prefHeight="17.0" prefWidth="105.0" text="Online reference :" />
         <TextField fx:id="onlineRef" layoutX="527.0" layoutY="14.0" prefHeight="25.0" prefWidth="283.0" />
+        <TextArea fx:id="comment" layoutX="29.0" layoutY="79.0" prefHeight="155.0" prefWidth="874.0" wrapText="true" />
+        <Label layoutX="29.0" layoutY="58.0" text="Comment :" />
     </children>
 </AnchorPane>

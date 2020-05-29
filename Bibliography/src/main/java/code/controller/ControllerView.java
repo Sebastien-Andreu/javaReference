@@ -635,16 +635,20 @@ public class ControllerView {
     }
 
     private void setupListOfFile() {
+        this.scrollShowFile.setFitToWidth(true);
+        this.scrollExtractFile.setFitToWidth(true);
+
+
         this.showDetails.setVisible(false);
         this.modifyDetails.setVisible(false);
         this.buttonEdit.setVisible(false);
         double widthMaxSize = 870.0D;
         this.anchorPaneFile.setMinWidth(widthMaxSize);
         this.scrollShowFile.setMinWidth(widthMaxSize);
-        this.showFile.setMinWidth(widthMaxSize - 2.0D);
+        this.showFile.setMinWidth(widthMaxSize - 20.0D);
         this.anchorPaneExtractFile.setMinWidth(widthMaxSize);
         this.scrollExtractFile.setMinWidth(widthMaxSize);
-        this.showExtractFile.setMinWidth(widthMaxSize - 2.0D);
+        this.showExtractFile.setMinWidth(widthMaxSize - 20.0D);
         this.hBoxExtractFile.setMinWidth(widthMaxSize);
     }
 

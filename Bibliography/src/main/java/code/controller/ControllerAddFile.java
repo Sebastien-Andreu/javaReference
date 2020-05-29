@@ -227,7 +227,6 @@ public class ControllerAddFile {
     }
 
     private void setComboBox() {
-        System.out.println("clear");
         this.inputTheme.getItems().clear();
         this.inputTypeOfDocument.getItems().clear();
         this.inputAuthor.getItems().clear();
@@ -414,6 +413,8 @@ public class ControllerAddFile {
         this.databaseAdd.save(this);
         (new JsonExport()).export(this);
         this.clearAddFile();
+        this.AvailabilityElec.selectedProperty().setValue(true);
+        this.eventListenerAvailability(new ActionEvent());
     }
 
     @FXML
@@ -470,10 +471,8 @@ public class ControllerAddFile {
     }
 
     private void clearAddFile() {
-        if (this.fileIsAvailable) {
-            this.showIcon.setImage(null);
-            this.titleOfImportFileAdd.setText("");
-        }
+        this.showIcon.setImage(null);
+        this.titleOfImportFileAdd.setText("");
 
         this.otherInput.setLayoutY(this.otherInputDefaultValueY);
         this.entryTypeOfDocument.getChildren().clear();

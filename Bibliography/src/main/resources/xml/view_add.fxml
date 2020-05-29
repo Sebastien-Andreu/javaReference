@@ -21,41 +21,50 @@
           <AnchorPane prefHeight="749.0" prefWidth="881.0">
               <AnchorPane layoutX="25.0" layoutY="5.0" prefHeight="214.0" prefWidth="879.0">
                   <children>
+
+                      <HBox alignment="CENTER" layoutX="6.0" layoutY="-2.0" prefHeight="33.0" prefWidth="872.0">
+                          <children>
+                              <Label prefHeight="17.0" prefWidth="73.0" text="Availability :" />
+                              <CheckBox fx:id="AvailabilityElec" mnemonicParsing="false" text="Electronic">
+                                  <opaqueInsets>
+                                      <Insets />
+                                  </opaqueInsets>
+                                  <HBox.margin>
+                                      <Insets right="20.0" />
+                                  </HBox.margin>
+                              </CheckBox>
+                              <CheckBox fx:id="AvailabilityLib" mnemonicParsing="false" text="Library">
+                                  <HBox.margin>
+                                      <Insets right="20.0" />
+                                  </HBox.margin>
+                              </CheckBox>
+                              <CheckBox fx:id="AvailabilityPrint" mnemonicParsing="false" text="Print/Paper" />
+                          </children>
+                      </HBox>
+
+
                       <Label layoutX="6.0" layoutY="55.0" prefHeight="17.0" prefWidth="53.0" text="Title :" />
                       <TextField fx:id="inputTitle" layoutX="59.0" layoutY="50.0" prefHeight="25.0" prefWidth="344.0" />
                       <Label layoutX="7.0" layoutY="90.0" prefHeight="17.0" prefWidth="53.0" text="Author :" />
+                      <ComboBox fx:id="inputAuthor" editable="true" layoutX="59.0" layoutY="86.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressTheme" prefHeight="25.0" prefWidth="345.0" styleClass="combo-box" />
                       <DatePicker fx:id="inputDate" layoutX="111.0" layoutY="119.0" prefHeight="25.0" prefWidth="293.0" />
                       <Label layoutX="7.0" layoutY="124.0" prefHeight="17.0" prefWidth="97.0" text="Publication date :" />
-                      <Label layoutX="424.0" layoutY="54.0" prefHeight="17.0" prefWidth="45.0" text="Theme :" />
+
                       <Label layoutX="6.0" layoutY="162.0" prefHeight="17.0" prefWidth="108.0" text="Type of document :" />
-                      <ComboBox fx:id="inputTheme" editable="true" layoutX="478.0" layoutY="49.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressTheme" prefHeight="25.0" prefWidth="398.0" styleClass="combo-box" />
                       <ComboBox fx:id="inputTypeOfDocument" layoutX="126.0" layoutY="158.0" onAction="#eventListenerTypeOfDocument" prefHeight="25.0" prefWidth="278.0" />
+
+                      <Label layoutX="424.0" layoutY="54.0" prefHeight="17.0" prefWidth="45.0" text="Theme :" />
+                      <ComboBox fx:id="inputTheme" editable="true" layoutX="478.0" layoutY="49.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressTheme" prefHeight="25.0" prefWidth="398.0" styleClass="combo-box" />
                       <ScrollPane cache="true" layoutX="425.0" layoutY="80.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="103.0" prefWidth="453.0">
                           <content>
                               <FlowPane fx:id="showAddTheme" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="436.0" rowValignment="TOP" vgap="5.0" />
                           </content>
                       </ScrollPane>
+
+
+
                       <Separator layoutX="6.0" layoutY="194.0" prefHeight="17.0" prefWidth="872.0" />
-                  <ComboBox fx:id="inputAuthor" editable="true" layoutX="59.0" layoutY="86.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressTheme" prefHeight="25.0" prefWidth="345.0" styleClass="combo-box" />
-                  <HBox alignment="CENTER" layoutX="6.0" layoutY="-2.0" prefHeight="33.0" prefWidth="872.0">
-                     <children>
-                        <Label prefHeight="17.0" prefWidth="73.0" text="Availability :" />
-                        <CheckBox fx:id="AvailabilityElec" mnemonicParsing="false" text="Electronic">
-                           <opaqueInsets>
-                              <Insets />
-                           </opaqueInsets>
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                        </CheckBox>
-                        <CheckBox fx:id="AvailabilityLib" mnemonicParsing="false" text="Library">
-                           <HBox.margin>
-                              <Insets right="20.0" />
-                           </HBox.margin>
-                        </CheckBox>
-                        <CheckBox fx:id="AvailabilityPrint" mnemonicParsing="false" text="Print/Paper" />
-                     </children>
-                  </HBox>
+
                   </children>
               </AnchorPane>
 

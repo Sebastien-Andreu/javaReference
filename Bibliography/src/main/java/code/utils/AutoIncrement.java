@@ -24,7 +24,11 @@ public class AutoIncrement {
 
             try {
                 this.myAutoCompletePopup.filter((string) -> {
-                    return string.toLowerCase().contains(((String)this.myNode.getValue()).toLowerCase());
+                    if (this.myNode.getValue() != null){
+                        return string.toLowerCase().contains(((String)this.myNode.getValue()).toLowerCase());
+                    } else {
+                        return false;
+                    }
                 });
                 if (!this.myAutoCompletePopup.getFilteredSuggestions().isEmpty() && !((String)this.myNode.getValue()).isEmpty()) {
                     this.myAutoCompletePopup.show(this.myNode);

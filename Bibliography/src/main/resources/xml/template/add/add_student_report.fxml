@@ -9,12 +9,11 @@
         <TextField fx:id="title" layoutX="103.0" layoutY="14.0" prefHeight="25.0" prefWidth="364.0" />
         <Label layoutX="29.0" layoutY="47.0" prefHeight="17.0" prefWidth="70.0" text="University :" />
         <TextField fx:id="univ" layoutX="103.0" layoutY="43.0" prefHeight="25.0" prefWidth="214.0" />
-        <Label layoutX="30.0" layoutY="77.0" prefHeight="17.0" prefWidth="94.0" text="Project type :" />
-        <TextField fx:id="project" layoutX="103.0" layoutY="73.0" prefHeight="25.0" prefWidth="257.0" />
         <Label layoutX="330.0" layoutY="47.0" prefHeight="17.0" prefWidth="38.0" text="Year :" />
         <TextField fx:id="year" layoutX="381.0" layoutY="43.0" prefHeight="25.0" prefWidth="86.0" />
-        <TextArea fx:id="comment" layoutX="30.0" layoutY="172.0" prefHeight="155.0" prefWidth="874.0" wrapText="true" />
-        <Label layoutX="30.0" layoutY="151.0" text="Comment :" />
+        <Label layoutX="30.0" layoutY="77.0" prefHeight="17.0" prefWidth="94.0" text="Project type :" />
+        <TextField fx:id="project" layoutX="103.0" layoutY="73.0" prefHeight="25.0" prefWidth="257.0" />
+
         <Label layoutX="515.0" layoutY="18.0" text="Author :" />
         <ComboBox fx:id="inputAuthor" editable="true" layoutX="587.0" layoutY="14.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressAuthor" prefHeight="25.0" prefWidth="283.0" styleClass="combo-box" />
         <ScrollPane cache="true" layoutX="515.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="82.0" prefWidth="354.0">
@@ -22,5 +21,7 @@
                 <FlowPane fx:id="showAuthor" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="75.0" prefWidth="344.0" rowValignment="TOP" vgap="5.0" />
             </content>
         </ScrollPane>
+        <TextArea fx:id="comment" layoutX="30.0" layoutY="172.0" prefHeight="155.0" prefWidth="874.0" wrapText="true" />
+        <Label layoutX="30.0" layoutY="151.0" text="Comment :" />
     </children>
 </AnchorPane>

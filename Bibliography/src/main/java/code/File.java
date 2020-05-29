@@ -195,10 +195,10 @@ public class File implements Serializable {
         double widthMinSize = 270.0D;
         this.controller.anchorPaneFile.setMinWidth(widthMinSize);
         this.controller.scrollShowFile.setMinWidth(widthMinSize);
-        this.controller.showFile.setMinWidth(widthMinSize - 2.0D);
+        this.controller.showFile.setMinWidth(widthMinSize - 20.0D);
         this.controller.anchorPaneExtractFile.setMinWidth(widthMinSize);
         this.controller.scrollExtractFile.setMinWidth(widthMinSize);
-        this.controller.showExtractFile.setMinWidth(widthMinSize - 2.0D);
+        this.controller.showExtractFile.setMinWidth(widthMinSize - 20.0D);
         this.controller.hBoxExtractFile.setMinWidth(widthMinSize);
         this.controller.showDetails.setVisible(true);
         this.controller.modifyDetails.setVisible(true);

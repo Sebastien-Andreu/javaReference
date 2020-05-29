@@ -7,13 +7,6 @@
    <children>
        <Label layoutX="29.0" layoutY="18.0" prefHeight="17.0" prefWidth="70.0" text="Conf name :" />
        <TextField fx:id="name" layoutX="102.0" layoutY="14.0" prefHeight="25.0" prefWidth="283.0" />
-       <Label layoutX="453.0" layoutY="18.0" text="Affiliation :" />
-       <ComboBox fx:id="inputAff" editable="true" layoutX="523.0" layoutY="14.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressAffiliation" prefHeight="25.0" prefWidth="380.0" styleClass="combo-box" />
-       <ScrollPane cache="true" layoutX="451.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="451.0">
-           <content>
-               <FlowPane fx:id="showAff" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="436.0" rowValignment="TOP" vgap="5.0" />
-           </content>
-       </ScrollPane>
       <Label layoutX="29.0" layoutY="47.0" prefHeight="17.0" prefWidth="70.0" text="Conf org :" />
       <TextField fx:id="org" layoutX="102.0" layoutY="43.0" prefHeight="25.0" prefWidth="283.0" />
       <Label layoutX="29.0" layoutY="76.0" prefHeight="17.0" prefWidth="70.0" text="Conf place :" />
@@ -22,7 +15,13 @@
       <TextField fx:id="code" layoutX="102.0" layoutY="102.0" prefHeight="25.0" prefWidth="283.0" />
       <Label layoutX="29.0" layoutY="136.0" prefHeight="17.0" prefWidth="70.0" text="Online ref :" />
       <TextField fx:id="ref" layoutX="102.0" layoutY="132.0" prefHeight="25.0" prefWidth="283.0" />
-
+       <Label layoutX="453.0" layoutY="18.0" text="Affiliation :" />
+       <ComboBox fx:id="inputAff" editable="true" layoutX="523.0" layoutY="14.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressAffiliation" prefHeight="25.0" prefWidth="380.0" styleClass="combo-box" />
+       <ScrollPane cache="true" layoutX="451.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="451.0">
+           <content>
+               <FlowPane fx:id="showAff" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="436.0" rowValignment="TOP" vgap="5.0" />
+           </content>
+       </ScrollPane>
        <TextArea fx:id="comment" layoutX="30.0" layoutY="197.0" prefHeight="155.0" prefWidth="874.0" wrapText="true" />
        <Label layoutX="30.0" layoutY="176.0" text="Comment :" />
    </children>
