@@ -34,7 +34,7 @@ public abstract class Database {
                 result = rs.getInt("ID");
             }
         } catch (SQLException e) {
-            System.out.println(e.getMessage());
+            System.out.println("error verifyIfThemeAlreadyExist");
         }
 
         return result;
@@ -42,6 +42,21 @@ public abstract class Database {
 
     protected int verifyIfAuthorExist(String author) {
         String sql = "select * from Author where author = '" + author + "'";
+        int result = 0;
+
+        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)){
+            if (rs.getInt("ID") > 0) {
+                result = rs.getInt("ID");
+            }
+        } catch (SQLException e) {
+            System.out.println(e.getMessage());
+        }
+
+        return result;
+    }
+
+    protected int verifyIfAffiliationExist(String name) {
+        String sql = "select * from Affiliation where name = '" + name + "'";
         int result = 0;
 
         try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(sql)){
@@ -129,7 +144,20 @@ public abstract class Database {
         } catch (SQLException var61) {
             System.out.println(var61.getMessage());
         }
+        return list;
+    }
 
+    public ArrayList<String> getAllAffiliation() {
+        String query2 = "select name from affiliation order by name";
+        ArrayList list = new ArrayList();
+
+        try (Connection conn = connect(); Statement stmt = conn.createStatement(); ResultSet rs = stmt.executeQuery(query2)){
+            while(rs.next()) {
+                list.add(rs.getString("name"));
+            }
+        } catch (SQLException var61) {
+            System.out.println(var61.getMessage());
+        }
         return list;
     }
 
@@ -150,9 +178,10 @@ public abstract class Database {
         String numberOfFile = "CREATE TABLE IF NOT EXISTS \"NumberOfFile\" (\n\t\"number\"\tINTEGER NOT NULL DEFAULT 0,\n\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE)";
         String importNumber = "INSERT INTO NumberOfFile (number) VALUES(0)";
         String theme = "CREATE TABLE \"Theme\" (\n\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n\t\"name\"\tREAL NOT NULL\n)";
+        String affiliation = "CREATE TABLE \"Affiliation\" (\n\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n\t\"name\"\tREAL NOT NULL\n)";
         String typeOfDocument = "CREATE TABLE \"TypeOfDocument\" (\n\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n\t\"name\"\tREAL NOT NULL\n)";
-        String importLivre = "INSERT INTO TypeOfDocument (name) VALUES(\"Livre\")";
-        String importAC = "INSERT INTO TypeOfDocument (name) VALUES(\"Article de conf\u00e9rence\")";
+        String importLivre = "INSERT INTO TypeOfDocument (name) VALUES(\"Book\")";
+        String importAC = "INSERT INTO TypeOfDocument (name) VALUES(\"Conference article\")";
         String importBookChapter = "INSERT INTO TypeOfDocument (name) VALUES(\"Book chapter\")";
         String importStandard = "INSERT INTO TypeOfDocument (name) VALUES(\"Standard\")";
         String importPatent = "INSERT INTO TypeOfDocument (name) VALUES(\"Patent\")";
@@ -166,6 +195,11 @@ public abstract class Database {
         String importPressRelease = "INSERT INTO TypeOfDocument (name) VALUES(\"Press release\")";
         String importSoftwareManual = "INSERT INTO TypeOfDocument (name) VALUES(\"Software manual\")";
         String importLectureNote = "INSERT INTO TypeOfDocument (name) VALUES(\"Lecture note\")";
+        String importConferencePresentation = "INSERT INTO TypeOfDocument (name) VALUES(\"Conference presentation\")";
+        String importJournalArticle = "INSERT INTO TypeOfDocument (name) VALUES(\"Journal article\")";
+        String importInternalDoc = "INSERT INTO TypeOfDocument (name) VALUES(\"Internal document\")";
+        String importPublicDoc = "INSERT INTO TypeOfDocument (name) VALUES(\"Public document\")";
+        String importTest = "INSERT INTO TypeOfDocument (name) VALUES(\"Test\")";
 
         String author = "CREATE TABLE \"Author\" (\n\t\"ID\"\tINTEGER NOT NULL PRIMARY KEY AUTOINCREMENT UNIQUE,\n\t\"author\"\tREAL NOT NULL\n)";
 
@@ -173,6 +207,7 @@ public abstract class Database {
             stmt.execute(author);
             stmt.execute(theme);
             stmt.execute(typeOfDocument);
+            stmt.execute(affiliation);
             stmt.execute(tag);
             stmt.execute(numberOfFile);
             stmt.execute(importLivre);
@@ -191,6 +226,11 @@ public abstract class Database {
             stmt.execute(importOnlineArticle);
             stmt.execute(importPressRelease);
             stmt.execute(importSoftwareManual);
+            stmt.execute(importConferencePresentation);
+            stmt.execute(importJournalArticle);
+            stmt.execute(importInternalDoc);
+            stmt.execute(importPublicDoc);
+            stmt.execute(importTest);
         } catch (SQLException var41) {
             System.out.println(var41.getMessage());
         }

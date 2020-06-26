@@ -2,6 +2,7 @@ package code.utils;
 
 import code.controller.template.add.*;
 import code.singleton.SingletonController;
+import org.json.JSONString;
 import org.json.simple.JSONObject;
 
 public class AdditionalInput {
@@ -9,10 +10,10 @@ public class AdditionalInput {
     public String getAdditionalInput(String str) {
         String result = "";
         switch(str) {
-            case "Livre":
+            case "Book":
                 result = "xml/template/add/add_textbook.fxml";
                 break;
-            case "Article de conf\u00e9rence":
+            case "Conference article":
                 result = "xml/template/add/add_CA.fxml";
                 break;
             case "Book chapter":
@@ -54,6 +55,18 @@ public class AdditionalInput {
             case "Software manual":
                 result = "xml/template/add/add_software_manual.fxml";
                 break;
+            case "Conference presentation":
+                result = "xml/template/add/add_conference_presentation.fxml";
+                break;
+            case "Journal article":
+                result = "xml/template/add/add_journal_article.fxml";
+                break;
+            case "Internal document":
+                result = "xml/template/add/add_internal_doc.fxml";
+                break;
+            case "Public document":
+                result = "xml/template/add/add_public_doc.fxml";
+                break;
         }
         return result;
     }
@@ -64,10 +77,10 @@ public class AdditionalInput {
 
     public static void setAdditionalInput(String str) {
         switch(str) {
-            case "Livre":
+            case "Book":
                 SingletonController.getInstance().templateController = new ControllerBook();
                 break;
-            case "Article de conference":
+            case "Conference article":
                 SingletonController.getInstance().templateController = new ControllerCA();
                 break;
             case "Book chapter":
@@ -108,6 +121,18 @@ public class AdditionalInput {
                 break;
             case "Software manual":
                 SingletonController.getInstance().templateController = new ControllerSoftwareManual();
+                break;
+            case "Conference presentation":
+                SingletonController.getInstance().templateController = new ControllerConferencePresentation();
+                break;
+            case "Journal article":
+                SingletonController.getInstance().templateController = new ControllerJournalArticle();
+                break;
+            case "Internal document":
+                SingletonController.getInstance().templateController = new ControllerInternalDoc();
+                break;
+            case "Public document":
+                SingletonController.getInstance().templateController = new ControllerPublicDoc();
                 break;
         }
     }

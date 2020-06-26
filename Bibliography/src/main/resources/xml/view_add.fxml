@@ -19,7 +19,7 @@
    <ScrollPane fx:id="scrollPane" layoutX="-1.0" layoutY="97.0" maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="602.0" prefWidth="940.0">
       <content>
           <AnchorPane prefHeight="749.0" prefWidth="881.0">
-              <AnchorPane layoutX="25.0" layoutY="5.0" prefHeight="214.0" prefWidth="879.0">
+              <AnchorPane layoutX="25.0" layoutY="5.0" prefHeight="265.0" prefWidth="879.0">
                   <children>
 
                       <HBox alignment="CENTER" layoutX="6.0" layoutY="-2.0" prefHeight="33.0" prefWidth="872.0">
@@ -44,18 +44,18 @@
 
 
                       <Label layoutX="6.0" layoutY="55.0" prefHeight="17.0" prefWidth="53.0" text="Title :" />
-                      <TextField fx:id="inputTitle" layoutX="59.0" layoutY="50.0" prefHeight="25.0" prefWidth="344.0" />
+                      <TextField fx:id="inputTitle" layoutX="59.0" layoutY="50.0" prefHeight="25.0" prefWidth="346.0" />
                       <Label layoutX="7.0" layoutY="90.0" prefHeight="17.0" prefWidth="53.0" text="Author :" />
-                      <ComboBox fx:id="inputAuthor" editable="true" layoutX="59.0" layoutY="86.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressTheme" prefHeight="25.0" prefWidth="345.0" styleClass="combo-box" />
-                      <DatePicker fx:id="inputDate" layoutX="111.0" layoutY="119.0" prefHeight="25.0" prefWidth="293.0" />
-                      <Label layoutX="7.0" layoutY="124.0" prefHeight="17.0" prefWidth="97.0" text="Publication date :" />
+                      <ComboBox fx:id="inputAuthor" editable="true" layoutX="59.0" layoutY="86.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressAuthor" prefHeight="25.0" prefWidth="345.0" styleClass="combo-box" />
+                      <DatePicker fx:id="inputDate" layoutX="464.0" layoutY="50.0" prefHeight="25.0" prefWidth="122.0" />
+                      <Label layoutX="424.0" layoutY="54.0" prefHeight="17.0" prefWidth="41.0" text="Date :" />
 
-                      <Label layoutX="6.0" layoutY="162.0" prefHeight="17.0" prefWidth="108.0" text="Type of document :" />
-                      <ComboBox fx:id="inputTypeOfDocument" layoutX="126.0" layoutY="158.0" onAction="#eventListenerTypeOfDocument" prefHeight="25.0" prefWidth="278.0" />
+                      <Label layoutX="6.0" layoutY="229.0" prefHeight="17.0" prefWidth="108.0" text="Type of document :" />
+                      <ComboBox fx:id="inputTypeOfDocument" layoutX="126.0" layoutY="225.0" onAction="#eventListenerTypeOfDocument" prefHeight="25.0" prefWidth="278.0" />
 
-                      <Label layoutX="424.0" layoutY="54.0" prefHeight="17.0" prefWidth="45.0" text="Theme :" />
-                      <ComboBox fx:id="inputTheme" editable="true" layoutX="478.0" layoutY="49.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressTheme" prefHeight="25.0" prefWidth="398.0" styleClass="combo-box" />
-                      <ScrollPane cache="true" layoutX="425.0" layoutY="80.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="103.0" prefWidth="453.0">
+                      <Label layoutX="424.0" layoutY="91.0" prefHeight="17.0" prefWidth="45.0" text="Theme :" />
+                      <ComboBox fx:id="inputTheme" editable="true" layoutX="478.0" layoutY="86.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressTheme" prefHeight="25.0" prefWidth="398.0" styleClass="combo-box" />
+                      <ScrollPane cache="true" layoutX="425.0" layoutY="117.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="103.0" prefWidth="453.0">
                           <content>
                               <FlowPane fx:id="showAddTheme" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="100.0" prefWidth="436.0" rowValignment="TOP" vgap="5.0" />
                           </content>
@@ -63,16 +63,25 @@
 
 
 
-                      <Separator layoutX="6.0" layoutY="194.0" prefHeight="17.0" prefWidth="872.0" />
+                      <Separator layoutX="6.0" layoutY="251.0" prefHeight="17.0" prefWidth="872.0" />
+                  <ScrollPane cache="true" layoutX="6.0" layoutY="117.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="103.0" prefWidth="398.0">
+                     <content>
+                        <FlowPane fx:id="showAuthor" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="96.0" prefWidth="378.0" rowValignment="TOP" vgap="5.0" />
+                     </content>
+                  </ScrollPane>
+                  <Label layoutX="425.0" layoutY="229.0" prefHeight="17.0" prefWidth="71.0" text="Confidential :" />
+                  <ComboBox fx:id="confidential" layoutX="502.0" layoutY="225.0" onAction="#eventListenerTypeOfDocument" prefHeight="25.0" prefWidth="84.0" />
+                  <Label layoutX="630.0" layoutY="229.0" prefHeight="17.0" prefWidth="39.0" text="Read :" />
+                  <ComboBox fx:id="read" layoutX="669.0" layoutY="225.0" onAction="#eventListenerTypeOfDocument" prefHeight="25.0" prefWidth="84.0" />
 
                   </children>
               </AnchorPane>
 
-              <AnchorPane fx:id="entryTypeOfDocument" layoutY="217.0" prefHeight="0.0" prefWidth="881.0">
+              <AnchorPane fx:id="entryTypeOfDocument" layoutY="269.0" prefHeight="7.0" prefWidth="881.0">
 
               </AnchorPane>
 
-              <AnchorPane fx:id="otherInput" layoutX="24.0" layoutY="226.0" prefHeight="594.0" prefWidth="880.0">
+              <AnchorPane fx:id="otherInput" layoutX="24.0" layoutY="276.0" prefHeight="594.0" prefWidth="880.0">
                <children>
                   <Label layoutX="6.0" layoutY="14.0" text="Key word :" />
                   <ComboBox fx:id="inputKeyWord" editable="true" layoutX="69.0" layoutY="10.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressKeyWord" prefHeight="25.0" prefWidth="398.0" styleClass="combo-box" />

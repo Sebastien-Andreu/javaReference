@@ -1,7 +1,6 @@
 package code.controller;
 
 import code.File;
-import code.Main;
 import code.database.DatabaseView;
 import code.singleton.SingletonController;
 import code.singleton.SingletonDatabase;
@@ -12,7 +11,6 @@ import java.awt.image.BufferedImage;
 import java.io.ByteArrayInputStream;
 import java.io.IOException;
 import java.io.ObjectInputStream;
-import java.nio.file.FileStore;
 import java.nio.file.Files;
 import java.nio.file.Path;
 import java.nio.file.Paths;
@@ -57,8 +55,6 @@ import javax.swing.Icon;
 import javax.swing.filechooser.FileSystemView;
 
 
-import java.nio.file.Files;
-
 import javafx.stage.FileChooser;
 import org.apache.commons.io.FileUtils;
 import org.apache.commons.io.FilenameUtils;
@@ -102,7 +98,7 @@ public class ControllerView {
     @FXML
     public Label detailsTheme;
     @FXML
-    public Label detailsTypeOfDocument;
+    public Label detailsTypeOfDocument, confidential, read;
     @FXML
     Button closeButtonDetails;
     @FXML
@@ -138,6 +134,7 @@ public class ControllerView {
     public final Set<KeyCode> pressedKeys = new HashSet();
     public List<File> listOfSelectedExtractFile = new ArrayList();
     public List<File> listOfSelectedRemoveExtractFile = new ArrayList();
+
     public ObservableList<String> tags = FXCollections.observableArrayList();
 
     @FXML
@@ -540,10 +537,19 @@ public class ControllerView {
 
             for(int var7 = 0; var7 < var6; ++var7) {
                 String s = var5[var7];
-                Iterator var9 = f.tags.iterator();
+                Iterator itTag = f.tags.iterator();
 
-                while(var9.hasNext()) {
-                    String str = (String)var9.next();
+                while(itTag.hasNext()) {
+                    String str = (String)itTag.next();
+                    if (this.isWordPresent(str.toLowerCase(), s.toLowerCase()) && this.addInTempCodeFile(tempCodeFile, f)) {
+                        tempCodeFile.add(f);
+                    }
+                }
+
+                Iterator itAuthor = f.author.iterator();
+
+                while(itAuthor.hasNext()) {
+                    String str = (String)itAuthor.next();
                     if (this.isWordPresent(str.toLowerCase(), s.toLowerCase()) && this.addInTempCodeFile(tempCodeFile, f)) {
                         tempCodeFile.add(f);
                     }
@@ -553,9 +559,9 @@ public class ControllerView {
                     tempCodeFile.add(f);
                 }
 
-                if (this.isWordPresent(f.author.toLowerCase(), s.toLowerCase()) && this.addInTempCodeFile(tempCodeFile, f)) {
-                    tempCodeFile.add(f);
-                }
+//                if (this.isWordPresent(f.author.toLowerCase(), s.toLowerCase()) && this.addInTempCodeFile(tempCodeFile, f)) {
+//                    tempCodeFile.add(f);
+//                }
 
                 if (this.isWordPresent(f.title.toLowerCase(), s.toLowerCase()) && this.addInTempCodeFile(tempCodeFile, f)) {
                     tempCodeFile.add(f);
@@ -688,11 +694,10 @@ public class ControllerView {
                 }
 
                 Path path = Paths.get(extractMetadata.getAbsolutePath() + "\\metadata.txt");
-                Iterator var9 = this.codeFilesExtract.iterator();
 
-                while(var9.hasNext()) {
-                    File f = (File)var9.next();
+                for (code.File f : this.codeFilesExtract) {
                     f.extractMetadata(path);
+                    f.extractMetaDateBebTexFormatIfIsPossible(extractMetadata);
                 }
 
                 this.extractFile(directory);
@@ -736,11 +741,10 @@ public class ControllerView {
             java.io.File directory = this.getExtractFile();
             if (directory != null) {
                 Path path = Paths.get(directory.getAbsolutePath() + "\\metadata.txt");
-                Iterator var4 = this.codeFilesExtract.iterator();
 
-                while(var4.hasNext()) {
-                    File f = (File)var4.next();
+                for (File f : this.codeFilesExtract) {
                     f.extractMetadata(path);
+                    f.extractMetaDateBebTexFormatIfIsPossible(directory);
                 }
 
                 this.extractFile(directory);

@@ -38,7 +38,7 @@ public class ControllerMscThesis implements TemplateController {
     public ComboBox<String> inputAff;
 
     @FXML
-    public TextField thesisRef, onlineRef, title;
+    public TextField thesisRef, onlineRef, supervisor;
 
     @FXML
     public TextArea comment;
@@ -56,7 +56,7 @@ public class ControllerMscThesis implements TemplateController {
     }
 
     private void setComboBox() {
-        this.inputAff.getItems().addAll(SingletonDatabase.getInstance().getAllAuthor());
+        this.inputAff.getItems().addAll(SingletonDatabase.getInstance().getAllAffiliation());
         AutoIncrement autoAff = new AutoIncrement(this.inputAff);
         this.inputAff.getEditor().setOnKeyPressed((ke) -> {
             Platform.runLater(autoAff::show);
@@ -116,8 +116,8 @@ public class ControllerMscThesis implements TemplateController {
                     JSONObject objectTypeOfDocument = (JSONObject)object.get("objectOfTypeOfDocument");
                     objectTypeOfDocument.keySet().forEach(e -> {
                         switch (e.toString()){
-                            case "title":
-                                map.put("title", objectTypeOfDocument.get("title").toString());
+                            case "supervisor":
+                                map.put("supervisor", objectTypeOfDocument.get("supervisor").toString());
                                 break;
                             case "thesisRef":
                                 map.put("thesisRef", objectTypeOfDocument.get("thesisRef").toString());
@@ -147,8 +147,8 @@ public class ControllerMscThesis implements TemplateController {
     @Override
     public JSONObject getJson() {
         JSONObject json = new JSONObject();
-        if (!this.title.getText().isEmpty()){
-            json.put("title", this.title.getText());
+        if (!this.supervisor.getText().isEmpty()){
+            json.put("supervisor", this.supervisor.getText());
         }
         if (!this.thesisRef.getText().isEmpty()){
             json.put("thesisRef", this.thesisRef.getText());
@@ -184,8 +184,8 @@ public class ControllerMscThesis implements TemplateController {
         final List[] result = new List[]{new ArrayList<>()};
         map.keySet().forEach(e ->{
             switch (e.toString()){
-                case "title":
-                    result[0].add("\nTitle : " + (String)map.get("title"));
+                case "supervisor":
+                    result[0].add("\nSupervisor : " + (String)map.get("supervisor"));
                     break;
                 case "thesisRef":
                     result[0].add("\nThesis reference : " + (String)map.get("thesisRef"));
@@ -214,11 +214,16 @@ public class ControllerMscThesis implements TemplateController {
     }
 
     @Override
+    public String getStringToFormatBibTex() {
+        return null;
+    }
+
+    @Override
     public void showToEdit() {
         SingletonFileSelected.getInstance().file.additionalMap.keySet().forEach(e -> {
             switch (e.toString()){
-                case "title":
-                    this.title.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("title"));
+                case "supervisor":
+                    this.supervisor.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("supervisor"));
                     break;
                 case "thesisRef":
                     this.thesisRef.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("thesisRef"));

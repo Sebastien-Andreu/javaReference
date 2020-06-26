@@ -2,6 +2,7 @@ package code.json;
 
 import code.controller.ControllerAddFile;
 import code.database.DatabaseAdd;
+import code.singleton.SingletonController;
 import code.singleton.SingletonFileSelected;
 import code.utils.AdditionalInput;
 import java.io.File;
@@ -26,19 +27,25 @@ public class JsonExport {
             JSONObject json = new JSONObject();
             JSONObject file = new JSONObject();
             JSONArray themes = new JSONArray();
+            JSONArray keyWord = new JSONArray();
+            JSONArray author = new JSONArray();
+
 
             for (String str : controller.addTheme){
                 themes.add(str.replace("é", "e"));
             }
 
-            JSONArray keyWord = new JSONArray();
             for (String str : controller.addTags){
                 keyWord.add(str.replace("é", "e"));
             }
 
-            file.put("Author", controller.inputAuthor.getValue()); // required
-            file.put("date", ((LocalDate)controller.inputDate.getValue()).toString()); // required
+            for (String str : controller.addAuthor){
+                author.add(str.replace("é", "e"));
+            }
+
             file.put("title", controller.inputTitle.getText()); // required
+            file.put("author", author); // required
+            file.put("date", ((LocalDate)controller.inputDate.getValue()).toString()); // required
             file.put("availability", this.getAvailability(controller)); // required
 
             file.put("note", controller.inputNote.getText());
@@ -46,12 +53,18 @@ public class JsonExport {
 
             file.put("theme", themes); // required
             file.put("keyWord", keyWord); // required
-            file.put("objectOfTypeOfDocument", (new AdditionalInput()).getObject());
+//            if ((new AdditionalInput()).getObject() != null){
+
+//            }
+            file.put("confidential", controller.confidential.getValue());
+            file.put("read", controller.read.getValue());
             json.put("name", controller.titleOfImportFileAdd.getText()); // required
-            json.put("typeOfDocument", controller.inputTypeOfDocument.getValue().replace("\u00e9", "e")); // required
             json.put("tag", controller.newTitleOfFile); // required
             json.put("ID", DatabaseAdd.getNumberOfFile());
             json.put("container", file);
+
+            json.put("typeOfDocument", controller.inputTypeOfDocument.getValue().replace("\u00e9", "e")); // required
+            file.put("objectOfTypeOfDocument", (new AdditionalInput()).getObject());
             JSONParser parser = new JSONParser();
 
             try {
@@ -81,18 +94,22 @@ public class JsonExport {
                 if (((JSONObject)o).get("ID").toString().equals(SingletonFileSelected.getInstance().file.firstMap.get("ID"))) {
                     JSONObject container = (JSONObject)((JSONObject)o).get("container");
                     JSONArray themes = new JSONArray();
+                    JSONArray keyWord = new JSONArray();
+                    JSONArray author = new JSONArray();
 
                     for (String str : controller.addTheme){
                         themes.add(str.replace("é", "e"));
                     }
 
-                    JSONArray keyWord = new JSONArray();
-
                     for (String str : controller.addTags){
                         keyWord.add(str.replace("é", "e"));
                     }
 
-                    container.put("Author", controller.inputAuthor.getValue()); // require
+                    for (String str : controller.addAuthor){
+                        author.add(str.replace("é", "e"));
+                    }
+
+                    container.put("author", author); // require
                     container.put("date", ((LocalDate)controller.inputDate.getValue()).toString());// require
                     container.put("title", controller.inputTitle.getText());// require
                     container.put("availability", this.getAvailability(controller));// require
@@ -104,6 +121,8 @@ public class JsonExport {
                     container.put("theme", themes);// require
                     container.put("keyWord", keyWord);// require
                     container.put("objectOfTypeOfDocument", (new AdditionalInput()).getObject());// require
+                    container.put("confidential", controller.confidential.getValue());
+                    container.put("read", controller.read.getValue());
                     ((JSONObject)o).put("name", SingletonFileSelected.getInstance().file.firstMap.get("name"));// require
                     ((JSONObject)o).put("typeOfDocument", controller.inputTypeOfDocument.getValue().replace("\u00e9", "e")); // required
                     ((JSONObject)o).put("tag", controller.newTitleOfFile);// require

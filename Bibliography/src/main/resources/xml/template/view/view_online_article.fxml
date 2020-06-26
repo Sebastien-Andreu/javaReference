@@ -3,29 +3,19 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="562.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewOnlineArticle">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="386.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewOnlineArticle">
     <children>
-        <Label fx:id="showName" layoutX="17.0" layoutY="18.0" prefHeight="17.0" prefWidth="43.0" style="-fx-font-weight: bold;" text="Title :" />
-        <Label fx:id="showLabelAff" layoutX="7.0" layoutY="287.0" text="Affiliation :" />
-        <ScrollPane cache="true" layoutX="8.0" layoutY="307.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
+        <Label fx:id="showLabelAff" layoutX="7.0" layoutY="114.0" text="Affiliation :" />
+        <ScrollPane cache="true" layoutX="8.0" layoutY="134.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
             <content>
                 <FlowPane fx:id="showAff" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="547.0" rowValignment="TOP" vgap="5.0" />
             </content>
         </ScrollPane>
-        <Label fx:id="showLabelAuthor" layoutX="7.0" layoutY="155.0" text="Author :" />
-        <ScrollPane cache="true" layoutX="8.0" layoutY="175.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
-            <content>
-                <FlowPane fx:id="showAuthor" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="547.0" rowValignment="TOP" vgap="5.0" />
-            </content>
-        </ScrollPane>
-        <Label fx:id="showOrg" layoutX="17.0" layoutY="47.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Publication date :" />
-        <Label fx:id="showPlace" layoutX="17.0" layoutY="76.0" prefHeight="17.0" prefWidth="70.0" style="-fx-font-weight: bold;" text="Acces date :" />
-        <Label fx:id="showCode" layoutX="17.0" layoutY="106.0" prefHeight="17.0" prefWidth="57.0" style="-fx-font-weight: bold;" text="Website :" />
-        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="441.0" prefHeight="113.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
-        <Label fx:id="showLabelComment" layoutX="7.0" layoutY="420.0" text="Comment :" />
-        <Label fx:id="title" layoutX="51.0" layoutY="18.0" prefHeight="17.0" prefWidth="473.0" text="" />
-        <Label fx:id="pubDate" layoutX="123.0" layoutY="47.0" prefHeight="17.0" prefWidth="368.0" text="" />
-        <Label fx:id="accessDate" layoutX="93.0" layoutY="76.0" prefHeight="17.0" prefWidth="424.0" text="" />
-        <Label fx:id="website" layoutX="74.0" layoutY="106.0" prefHeight="17.0" prefWidth="424.0" text="" />
+        <Label fx:id="showPlace" layoutX="17.0" layoutY="8.0" prefHeight="17.0" prefWidth="70.0" style="-fx-font-weight: bold;" text="Acces date :" />
+        <Label fx:id="showCode" layoutX="17.0" layoutY="38.0" prefHeight="17.0" prefWidth="57.0" style="-fx-font-weight: bold;" text="Website :" />
+        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="268.0" prefHeight="113.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
+        <Label fx:id="showLabelComment" layoutX="7.0" layoutY="247.0" text="Comment :" />
+        <Label fx:id="accessDate" layoutX="93.0" layoutY="8.0" prefHeight="17.0" prefWidth="424.0" text="" />
+        <Label fx:id="website" layoutX="74.0" layoutY="38.0" prefHeight="17.0" prefWidth="424.0" text="" />
     </children>
 </AnchorPane>

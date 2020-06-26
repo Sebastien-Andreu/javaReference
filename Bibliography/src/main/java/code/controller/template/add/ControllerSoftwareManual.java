@@ -38,7 +38,7 @@ public class ControllerSoftwareManual implements TemplateController {
     public ComboBox<String> inputAff;
 
     @FXML
-    public TextField onlineRef, title;
+    public TextField onlineRef, title, version;
 
     @FXML
     public TextArea comment;
@@ -56,7 +56,7 @@ public class ControllerSoftwareManual implements TemplateController {
     }
 
     private void setComboBox() {
-        this.inputAff.getItems().addAll(SingletonDatabase.getInstance().getAllAuthor());
+        this.inputAff.getItems().addAll(SingletonDatabase.getInstance().getAllAffiliation());
         AutoIncrement autoAff = new AutoIncrement(this.inputAff);
         this.inputAff.getEditor().setOnKeyPressed((ke) -> {
             Platform.runLater(autoAff::show);
@@ -119,6 +119,9 @@ public class ControllerSoftwareManual implements TemplateController {
                             case "title":
                                 map.put("title", objectTypeOfDocument.get("title").toString());
                                 break;
+                            case "version":
+                                map.put("version", objectTypeOfDocument.get("version").toString());
+                                break;
                             case "onlineRef":
                                 map.put("onlineRef", objectTypeOfDocument.get("onlineRef").toString());
                                 break;
@@ -146,6 +149,9 @@ public class ControllerSoftwareManual implements TemplateController {
         JSONObject json = new JSONObject();
         if (!this.title.getText().isEmpty()){
             json.put("title", this.title.getText());
+        }
+        if (!this.version.getText().isEmpty()){
+            json.put("version", this.version.getText());
         }
         if (!this.onlineRef.getText().isEmpty()){
             json.put("onlineRef", this.onlineRef.getText());
@@ -179,7 +185,10 @@ public class ControllerSoftwareManual implements TemplateController {
         map.keySet().forEach(e ->{
             switch (e.toString()){
                 case "title":
-                    result[0].add("\nTitle : " + (String)map.get("title"));
+                    result[0].add("\nSoftware name : " + (String)map.get("title"));
+                    break;
+                case "version":
+                    result[0].add("\nSoftware version : " + (String)map.get("version"));
                     break;
                 case "onlineRef":
                     result[0].add("\nOnline reference : " + (String)map.get("onlineRef"));
@@ -205,11 +214,19 @@ public class ControllerSoftwareManual implements TemplateController {
     }
 
     @Override
+    public String getStringToFormatBibTex() {
+        return null;
+    }
+
+    @Override
     public void showToEdit() {
         SingletonFileSelected.getInstance().file.additionalMap.keySet().forEach(e -> {
             switch (e.toString()){
                 case "title":
                     this.title.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("title"));
+                    break;
+                case "version":
+                    this.version.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("version"));
                     break;
                 case "onlineRef":
                     this.onlineRef.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("onlineRef"));

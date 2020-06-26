@@ -3,31 +3,23 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="589.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewNewspaper">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="453.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewNewspaper">
     <children>
-        <Label fx:id="showName" layoutX="17.0" layoutY="18.0" prefHeight="17.0" prefWidth="43.0" style="-fx-font-weight: bold;" text="Title :" />
-        <Label fx:id="showLabelAff" layoutX="7.0" layoutY="316.0" text="Affiliation :" />
-        <ScrollPane cache="true" layoutX="8.0" layoutY="336.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
+        <Label fx:id="showLabelAff" layoutX="7.0" layoutY="179.0" text="Affiliation :" />
+        <ScrollPane cache="true" layoutX="8.0" layoutY="199.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
             <content>
                 <FlowPane fx:id="showAff" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="547.0" rowValignment="TOP" vgap="5.0" />
             </content>
         </ScrollPane>
-        <Label fx:id="showLabelAuthor" layoutX="7.0" layoutY="184.0" text="Author :" />
-        <ScrollPane cache="true" layoutX="8.0" layoutY="204.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
-            <content>
-                <FlowPane fx:id="showAuthor" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="547.0" rowValignment="TOP" vgap="5.0" />
-            </content>
-        </ScrollPane>
-        <Label fx:id="showOrg" layoutX="17.0" layoutY="47.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Magazine name :" />
-        <Label fx:id="showPlace" layoutX="17.0" layoutY="76.0" prefHeight="17.0" prefWidth="113.0" style="-fx-font-weight: bold;" text="Magazine number :" />
-        <Label fx:id="showCode" layoutX="17.0" layoutY="106.0" prefHeight="17.0" prefWidth="57.0" style="-fx-font-weight: bold;" text="Website :" />
-        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="470.0" prefHeight="113.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
-        <Label fx:id="showLabelComment" layoutX="7.0" layoutY="449.0" text="Comment :" />
-        <Label fx:id="title" layoutX="51.0" layoutY="18.0" prefHeight="17.0" prefWidth="473.0" text="" />
-        <Label fx:id="name" layoutX="118.0" layoutY="47.0" prefHeight="17.0" prefWidth="373.0" text="" />
-        <Label fx:id="number" layoutX="131.0" layoutY="76.0" prefHeight="17.0" prefWidth="386.0" text="" />
-        <Label fx:id="website" layoutX="74.0" layoutY="106.0" prefHeight="17.0" prefWidth="424.0" text="" />
-      <Label fx:id="showCode1" layoutX="17.0" layoutY="135.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Online reference :" />
-      <Label fx:id="onlineRef" layoutX="125.0" layoutY="135.0" prefHeight="17.0" prefWidth="416.0" text="" />
+        <Label fx:id="showOrg" layoutX="17.0" layoutY="11.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Magazine name :" />
+        <Label fx:id="showPlace" layoutX="17.0" layoutY="40.0" prefHeight="17.0" prefWidth="113.0" style="-fx-font-weight: bold;" text="Magazine number :" />
+        <Label fx:id="showCode" layoutX="17.0" layoutY="70.0" prefHeight="17.0" prefWidth="75.0" style="-fx-font-weight: bold;" text="Publisher :" />
+        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="333.0" prefHeight="113.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
+        <Label fx:id="showLabelComment" layoutX="7.0" layoutY="312.0" text="Comment :" />
+        <Label fx:id="name" layoutX="118.0" layoutY="11.0" prefHeight="17.0" prefWidth="373.0" text="" />
+        <Label fx:id="number" layoutX="131.0" layoutY="40.0" prefHeight="17.0" prefWidth="386.0" text="" />
+        <Label fx:id="publisher" layoutX="82.0" layoutY="70.0" prefHeight="17.0" prefWidth="416.0" text="" />
+      <Label fx:id="showCode1" layoutX="17.0" layoutY="99.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Online reference :" />
+      <Label fx:id="onlineRef" layoutX="125.0" layoutY="99.0" prefHeight="17.0" prefWidth="416.0" text="" />
     </children>
 </AnchorPane>

@@ -2,6 +2,7 @@ package code.controller.template.add;
 
 import java.util.HashMap;
 import java.util.Map;
+
 import javafx.scene.layout.AnchorPane;
 import org.json.simple.JSONObject;
 
@@ -15,6 +16,7 @@ public interface TemplateController {
     AnchorPane loadView();
 
     String getStringToExtract();
+    String getStringToFormatBibTex();
 
     void showToEdit();
 }

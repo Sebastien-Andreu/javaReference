@@ -3,7 +3,6 @@ package code.controller;
 import code.Main;
 import java.io.IOException;
 
-import code.singleton.SingletonController;
 import code.singleton.SingletonFileSelected;
 import javafx.application.Platform;
 import javafx.event.ActionEvent;
@@ -15,9 +14,10 @@ import javafx.stage.Stage;
 public class ControllerMenu {
     public boolean addFileIsShowing = false;
     public boolean showFileIsShowing = false;
-    public boolean aboutIsShowing = false;
+//    public boolean aboutIsShowing = false;
     public static Stage stageShow;
-    public static Stage stageAbout;
+//    public static Stage stageAbout;
+    public static Stage stageAdd;
 
     public ControllerMenu() {
     }
@@ -28,7 +28,7 @@ public class ControllerMenu {
             if (!this.addFileIsShowing) {
                 this.addFileIsShowing = true;
                 Parent root = FXMLLoader.load(ClassLoader.getSystemResource("xml/view_add.fxml"));
-                Stage stageAdd = new Stage();
+                stageAdd = new Stage();
                 stageAdd.setResizable(false);
                 stageAdd.setTitle("Bibliography");
                 stageAdd.setScene(new Scene(root));
@@ -69,21 +69,8 @@ public class ControllerMenu {
 
     public void onUserWantToShowAbout(ActionEvent event) {
         try {
-            if (!this.aboutIsShowing) {
-                this.aboutIsShowing = true;
-                Parent root = FXMLLoader.load(ClassLoader.getSystemResource("xml/about.fxml"));
-                stageAbout = new Stage();
-                stageAbout.setTitle("Bibliography");
-                stageAbout.setScene(new Scene(root));
-                stageAbout.setResizable(false);
-                stageAbout.setWidth(600.0D);
-                stageAbout.setHeight(430.0D);
-                stageAbout.setOnCloseRequest((e) -> {
-                    stageAbout.close();
-                    this.aboutIsShowing = false;
-                });
-                stageAbout.show();
-            }
+            String[] cmdArray = {"cmd", "/c", "start", "about/About.pdf"}; // just change folder
+            java.lang.Runtime.getRuntime().exec(cmdArray);
         } catch (IOException e) {
             e.printStackTrace();
         }

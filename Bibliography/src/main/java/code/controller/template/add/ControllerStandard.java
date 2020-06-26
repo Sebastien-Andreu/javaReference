@@ -116,6 +116,11 @@ public class ControllerStandard  implements TemplateController{
     }
 
     @Override
+    public String getStringToFormatBibTex() {
+        return null;
+    }
+
+    @Override
     public void showToEdit() {
         SingletonFileSelected.getInstance().file.additionalMap.keySet().forEach(e -> {
             switch (e.toString()){

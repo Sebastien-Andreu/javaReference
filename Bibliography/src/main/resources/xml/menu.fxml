@@ -16,12 +16,12 @@
       <AnchorPane prefHeight="400.0" prefWidth="290.0">
          <children>
             <Button layoutX="2.0" layoutY="373.0" mnemonicParsing="false" onAction="#onUserWantToShowSettings" prefHeight="20.0" prefWidth="70.0" text="Settings" />
-            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="45.0" layoutY="122.0" pickOnBounds="true" preserveRatio="true">
+            <ImageView fitHeight="150.0" fitWidth="200.0" layoutX="45.0" layoutY="113.0" pickOnBounds="true" preserveRatio="true">
                <image>
                   <Image url="@../image/siteon0-e5814.png" />
                </image>
             </ImageView>
-            <Label alignment="CENTER" contentDisplay="CENTER" layoutY="261.0" prefHeight="17.0" prefWidth="290.0" text="Version 0.1, 04-05-2020 , DAEP / ISAE-SUPAERO" />
+            <Label alignment="CENTER" contentDisplay="CENTER" layoutY="261.0" prefHeight="17.0" prefWidth="290.0" text="Version 0.3, 11/06/2020 , DAEP / ISAE-SUPAERO" />
          </children>
       </AnchorPane>
    </children>

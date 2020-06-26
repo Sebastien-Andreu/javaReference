@@ -16,11 +16,6 @@ public class ControllerViewBookChapter {
     public TextArea comment;
     @FXML
     public Label title, editor, isbn, edition, publisher, publisherOffice, series;
-    @FXML
-    public FlowPane showAuthor;
-
-
-    public ObservableList<String> author = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
@@ -51,32 +46,7 @@ public class ControllerViewBookChapter {
                 case "comment":
                     this.comment.setText(SingletonController.getInstance().templateController.map.get("comment"));
                     break;
-                case "author":
-                    String list = (SingletonController.getInstance().templateController.map.get("author")).replace("\"", "").replace("[", "").replace("]", "");
-                    String[] ary = list.split(",");
-                    this.author.addListener(this::eventListenerAffiliation);
-
-                    for(String str: ary) {
-                        this.author.add(str);
-                    }
-                    break;
             }
         });
-    }
-
-    private void eventListenerAffiliation(ListChangeListener.Change<? extends String> change) {
-        while(change.next()) {
-            if (change.wasAdded()) {
-                Button result = new Button((String)this.author.get(this.author.size() - 1));
-                result.setPrefHeight(20.0D);
-                result.setContentDisplay(ContentDisplay.RIGHT);
-                result.setStyle("-fx-padding: 5 5 5 5");
-                this.showAuthor.getChildren().add(result);
-            }
-
-            if (change.wasRemoved()) {
-                this.showAuthor.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
-            }
-        }
     }
 }

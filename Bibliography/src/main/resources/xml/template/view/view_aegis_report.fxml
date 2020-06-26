@@ -3,21 +3,13 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
-<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="429.0" prefWidth="562.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewAegisReport">
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="242.0" prefWidth="562.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewAegisReport">
     <children>
-        <Label fx:id="labelEditor" layoutX="17.0" layoutY="18.0" prefHeight="17.0" prefWidth="34.0" style="-fx-font-weight: bold;" text="Title :" />
-        <Label fx:id="labelSerie" layoutX="17.0" layoutY="47.0" prefHeight="17.0" prefWidth="43.0" style="-fx-font-weight: bold;" text="Track :" />
-        <Label fx:id="labelEdition" layoutX="18.0" layoutY="76.0" prefHeight="17.0" prefWidth="40.0" style="-fx-font-weight: bold;" text="Year :" />
-        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="292.0" prefHeight="133.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
-        <Label fx:id="labelComment" layoutX="7.0" layoutY="274.0" text="Comment :" />
-        <Label fx:id="title" layoutX="58.0" layoutY="18.0" prefHeight="17.0" prefWidth="418.0" text="" />
-        <Label fx:id="track" layoutX="63.0" layoutY="47.0" prefHeight="17.0" prefWidth="426.0" text="" />
-        <Label fx:id="year" layoutX="57.0" layoutY="76.0" prefHeight="17.0" prefWidth="448.0" text="" />
-        <Label fx:id="showLabelAuthor" layoutX="7.0" layoutY="132.0" text="Author :" />
-        <ScrollPane cache="true" layoutX="8.0" layoutY="152.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
-            <content>
-                <FlowPane fx:id="showAuthor" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="547.0" rowValignment="TOP" vgap="5.0" />
-            </content>
-        </ScrollPane>
+        <Label fx:id="labelSerie" layoutX="17.0" layoutY="14.0" prefHeight="17.0" prefWidth="95.0" style="-fx-font-weight: bold;" text="Roadmap track :" />
+        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="100.0" prefHeight="133.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
+        <Label fx:id="labelComment" layoutX="7.0" layoutY="82.0" text="Comment :" />
+        <Label fx:id="track" layoutX="112.0" layoutY="14.0" prefHeight="17.0" prefWidth="377.0" text="" />
+      <Label fx:id="labelEdition1" layoutX="18.0" layoutY="41.0" prefHeight="17.0" prefWidth="107.0" style="-fx-font-weight: bold;" text="Roadmap theme :" />
+      <Label fx:id="theme" layoutX="128.0" layoutY="41.0" prefHeight="17.0" prefWidth="377.0" text="" />
     </children>
 </AnchorPane>

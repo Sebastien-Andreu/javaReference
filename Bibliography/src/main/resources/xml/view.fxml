@@ -42,7 +42,7 @@
             <content>
                   <AnchorPane prefHeight="685.0" prefWidth="146.0">
                       <children>
-                          <AnchorPane layoutY="8.0" prefHeight="152.0" prefWidth="537.0">
+                          <AnchorPane layoutY="8.0" prefHeight="208.0" prefWidth="552.0">
                               <children>
                                   <Label layoutX="15.0" layoutY="35.0" style="-fx-font-weight: bold;" text="Title :" />
                                   <Label layoutX="15.0" layoutY="60.0" style="-fx-font-weight: bold;" text="Author :" />
@@ -59,12 +59,16 @@
                                           <Label fx:id="detailsName" onMouseClicked="#onUserWantToShowFile" style="-fx-font-weight: bold;" text="Title" underline="true" />
                                       </children>
                                   </HBox>
+                           <Label layoutX="15.0" layoutY="161.0" style="-fx-font-weight: bold;" text="Confidential :" />
+                           <Label fx:id="confidential" layoutX="100.0" layoutY="161.0" prefHeight="17.0" prefWidth="372.0" />
+                           <Label layoutX="15.0" layoutY="186.0" style="-fx-font-weight: bold;" text="Read :" />
+                           <Label fx:id="read" layoutX="56.0" layoutY="186.0" prefHeight="17.0" prefWidth="388.0" />
                               </children>
                           </AnchorPane>
                           <Button fx:id="closeButtonDetails" layoutX="544.0" layoutY="4.0" mnemonicParsing="false" onAction="#onActionCloseDetails" prefHeight="9.0" prefWidth="23.0" text="X" />
-                     <Separator layoutX="4.0" layoutY="173.0" prefHeight="25.0" prefWidth="558.0" />
-                     <AnchorPane fx:id="showAdditional" layoutY="189.0" prefHeight="17.0" prefWidth="568.0" />
-                     <AnchorPane fx:id="showOtherDetails" layoutX="5.0" layoutY="205.0" prefHeight="479.0" prefWidth="559.0">
+                     <Separator layoutX="4.0" layoutY="213.0" prefHeight="25.0" prefWidth="558.0" />
+                     <AnchorPane fx:id="showAdditional" layoutY="232.0" prefHeight="17.0" prefWidth="568.0" />
+                     <AnchorPane fx:id="showOtherDetails" layoutX="5.0" layoutY="244.0" prefHeight="479.0" prefWidth="559.0">
                         <children>
                            <Separator prefHeight="25.0" prefWidth="559.0" />
                                 <AnchorPane layoutY="17.0" prefHeight="124.0" prefWidth="518.0">

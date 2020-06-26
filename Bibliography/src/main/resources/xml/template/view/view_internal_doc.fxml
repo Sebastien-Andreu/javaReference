@@ -1,0 +1,13 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="225.0" prefWidth="562.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewInternalDoc">
+    <children>
+        <Label fx:id="labelEditor" layoutX="17.0" layoutY="18.0" prefHeight="17.0" prefWidth="41.0" style="-fx-font-weight: bold;" text="Type :" />
+        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="87.0" prefHeight="133.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
+        <Label fx:id="labelComment" layoutX="7.0" layoutY="69.0" text="Comment :" />
+        <Label fx:id="type" layoutX="55.0" layoutY="18.0" prefHeight="17.0" prefWidth="421.0" text="" />
+    </children>
+</AnchorPane>

@@ -13,8 +13,8 @@ public class TagFile {
     public TagFile() {
     }
 
-    public String getTag(String name, ObservableList<String> theme, DatePicker date) {
-        this.name = name;
+    public String getTag(ObservableList<String> name, ObservableList<String> theme, DatePicker date) {
+        this.name = name.get(0);
         this.theme = theme;
         this.date = date;
         return this.getName() + "_" + this.getTheme() + "_" + this.getDate();
@@ -23,8 +23,12 @@ public class TagFile {
     private String getName() {
         Character letterName = this.name.toUpperCase().toCharArray()[0];
         String[] name = this.name.split(" ");
-        name[1] = name[1].substring(0, 1).toUpperCase() + name[1].substring(1);
-        return letterName + "." + name[1];
+        if (name.length > 1){
+            name[1] = name[1].substring(0, 1).toUpperCase() + name[1].substring(1);
+            return letterName + "." + name[1];
+        } else {
+            return name[0] + ".";
+        }
     }
 
     private String getTheme() {

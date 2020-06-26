@@ -16,7 +16,7 @@ public class ControllerViewPhdThesis {
     @FXML
     public TextArea comment;
     @FXML
-    public Label title, reportRef, onlineRef;
+    public Label supervisor, onlineRef;
 
     @FXML
     public FlowPane showAff;
@@ -28,11 +28,8 @@ public class ControllerViewPhdThesis {
 
         SingletonController.getInstance().templateController.map.keySet().forEach(e -> {
             switch (e.toString()){
-                case "title":
-                    this.title.setText(SingletonController.getInstance().templateController.map.get("title"));
-                    break;
-                case "reportRef":
-                    this.reportRef.setText(SingletonController.getInstance().templateController.map.get("reportRef"));
+                case "supervisor":
+                    this.supervisor.setText(SingletonController.getInstance().templateController.map.get("supervisor"));
                     break;
                 case "onlineRef":
                     this.onlineRef.setText(SingletonController.getInstance().templateController.map.get("onlineRef"));

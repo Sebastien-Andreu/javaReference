@@ -1,8 +1,3 @@
-//
-// Source code recreated from a .class file by IntelliJ IDEA
-// (powered by Fernflower decompiler)
-//
-
 package code.controller;
 
 import code.database.DatabaseAdd;
@@ -13,23 +8,23 @@ import code.singleton.SingletonFileSelected;
 import code.utils.AdditionalInput;
 import code.utils.AutoIncrement;
 import code.utils.TagFile;
-import java.awt.Component;
 import java.awt.image.BufferedImage;
 import java.io.File;
 import java.io.IOException;
 import java.nio.file.Files;
-import java.nio.file.LinkOption;
 import java.nio.file.Path;
 import java.nio.file.Paths;
 import java.text.Normalizer;
 import java.text.Normalizer.Form;
 import java.time.LocalDate;
-import java.util.Iterator;
 import java.util.List;
 import java.util.stream.Collectors;
 import java.util.stream.Stream;
+
+import code.utils.Toast;
 import javafx.application.Platform;
 import javafx.collections.FXCollections;
+import javafx.collections.ListChangeListener;
 import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.embed.swing.SwingFXUtils;
@@ -75,7 +70,7 @@ public class ControllerAddFile {
     @FXML
     public DatePicker inputDate;
     @FXML
-    public ComboBox<String> inputTypeOfDocument;
+    public ComboBox<String> inputTypeOfDocument, confidential, read;
     @FXML
     public ComboBox<String> inputTheme;
     @FXML
@@ -86,6 +81,8 @@ public class ControllerAddFile {
     private FlowPane showKeyWord;
     @FXML
     private FlowPane showAddTheme;
+    @FXML
+    private FlowPane showAuthor;
     @FXML
     public Button buttonEdit;
     @FXML
@@ -118,12 +115,18 @@ public class ControllerAddFile {
     public boolean fileIsAvailable;
     public ObservableList<String> addTags = FXCollections.observableArrayList();
     public ObservableList<String> addTheme = FXCollections.observableArrayList();
+    public ObservableList<String> addAuthor = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         this.databaseAdd = new DatabaseAdd();
         this.addTheme.addListener(this::eventListenerAddTheme);
         this.addTags.addListener(this::eventListenerAddTags);
+        this.addAuthor.addListener(this::eventListenerAddAuthor);
+
+        confidential.setItems(FXCollections.observableArrayList("Yes", "No"));
+        read.setItems(FXCollections.observableArrayList("Yes", "No"));
+
         this.inputTheme.getEditor().textProperty().addListener((obs, oldText, newText) -> {
             this.inputTheme.setValue(newText);
         });
@@ -177,11 +180,25 @@ public class ControllerAddFile {
                 }
             }
 
+            String listAuthor = SingletonFileSelected.getInstance().file.firstMap.get("author").replace("\"", "").replace("[", "").replace("]", "");
+            String[] aryAuthor = listAuthor.split(",");
+            List<String> allAuthor = SingletonDatabase.getInstance().getAllAuthor();
+
+            for(String str : aryAuthor) {
+                for (String str2: allAuthor) {
+                    if (str.equals(removeAccents(str2))) {
+                        this.addAuthor.add(str);
+                        break;
+                    }
+                }
+            }
+
+            this.read.setValue(SingletonFileSelected.getInstance().file.firstMap.get("read"));
+            this.confidential.setValue(SingletonFileSelected.getInstance().file.firstMap.get("confidential"));
 
             this.titleOfImportFileAdd.setText(SingletonFileSelected.getInstance().title);
             this.showIcon.setImage(SingletonFileSelected.getInstance().image);
             this.inputTitle.setText(SingletonFileSelected.getInstance().file.firstMap.get("title"));
-            this.inputAuthor.setValue(SingletonFileSelected.getInstance().file.firstMap.get("Author"));
             this.inputDate.setValue(LocalDate.parse(SingletonFileSelected.getInstance().file.firstMap.get("date")));
             this.inputTypeOfDocument.setValue(SingletonFileSelected.getInstance().file.firstMap.get("typeOfDocument"));
             this.inputNote.setText(SingletonFileSelected.getInstance().file.firstMap.get("note"));
@@ -300,7 +317,25 @@ public class ControllerAddFile {
                 this.showAddTheme.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
             }
         }
+    }
 
+    private void eventListenerAddAuthor(ListChangeListener.Change<? extends String> change) {
+        while(change.next()) {
+            if (change.wasAdded()) {
+                Button btn = this.getButtonTag((String)this.addAuthor.get(this.addAuthor.size() - 1));
+                btn.setOnMouseClicked((event) -> {
+                    if (event.getClickCount() == 2) {
+                        this.addAuthor.remove(btn.getText());
+                    }
+
+                });
+                this.showAuthor.getChildren().add(btn);
+            }
+
+            if (change.wasRemoved()) {
+                this.showAuthor.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
+            }
+        }
     }
 
     public void eventListenerTypeOfDocument(ActionEvent event) {
@@ -357,117 +392,171 @@ public class ControllerAddFile {
 
     @FXML
     private void saveData() {
-        String tag = (new TagFile()).getTag(this.inputAuthor.getValue(), this.addTheme, this.inputDate);
-        File str;
-        if (this.fileIsAvailable) {
-            String extension = this.titleOfImportFileAdd.getText().substring(this.titleOfImportFileAdd.getText().lastIndexOf(".") + 1);
-            try {
-                Stream<Path> walk = Files.walk(this.directoryDestination);
+        if (verifyInputFile() && verifyIfAddIsPossible()){
+            String tag = (new TagFile()).getTag(this.addAuthor, this.addTheme, this.inputDate);
+            File str;
+            if (this.fileIsAvailable) {
+                String extension = this.titleOfImportFileAdd.getText().substring(this.titleOfImportFileAdd.getText().lastIndexOf(".") + 1);
                 try {
-                    List<File> files = walk.filter(Files::isRegularFile).map(Path::toFile).collect(Collectors.toList());
-                    if (!files.isEmpty()) {
-                        int id = 0;
-                        String tempTag = tag;
-                        for (File file : files){
-                            if (file.getName().equals(tag + ".txt")) {
-                                tag = tempTag + '_' + ++id;
+                    Stream<Path> walk = Files.walk(this.directoryDestination);
+                    try {
+                        List<File> files = walk.filter(Files::isRegularFile).map(Path::toFile).collect(Collectors.toList());
+                        if (!files.isEmpty()) {
+                            int id = 0;
+                            String tempTag = tag;
+                            for (File file : files){
+                                if (file.getName().equals(tag + ".txt")) {
+                                    tag = tempTag + '_' + ++id;
+                                }
                             }
                         }
+                        this.newTitleOfFile = tag + "." + extension;
+                        File source = new File(this.filesAdd.get(0).getAbsolutePath());
+                        str = new File(this.directoryDestination + "\\" + tag + "." + extension);
+                        FileUtils.copyFile(source, str);
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
                     }
-                    this.newTitleOfFile = tag + "." + extension;
-                    File source = new File(this.filesAdd.get(0).getAbsolutePath());
-                    str = new File(this.directoryDestination + "\\" + tag + "." + extension);
-                    FileUtils.copyFile(source, str);
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-        } else {
-            this.titleOfImportFileAdd.setText("Not available");
-            try {
-                Stream<Path> walk = Files.walk(this.directoryDestination);
+            } else {
+                this.titleOfImportFileAdd.setText("Not available");
                 try {
-                    List<File> files = walk.filter(Files::isRegularFile).map(Path::toFile).collect(Collectors.toList());
-                    if (!files.isEmpty()) {
-                        int id = 0;
-                        String tempTag = tag;
-                        for (File file : files){
-                            if (file.getName().equals(tag + ".txt")) {
-                                tag = tempTag + '_' + ++id;
+                    Stream<Path> walk = Files.walk(this.directoryDestination);
+                    try {
+                        List<File> files = walk.filter(Files::isRegularFile).map(Path::toFile).collect(Collectors.toList());
+                        if (!files.isEmpty()) {
+                            int id = 0;
+                            String tempTag = tag;
+                            for (File file : files){
+                                if (file.getName().equals(tag + ".txt")) {
+                                    tag = tempTag + '_' + ++id;
+                                }
                             }
                         }
+                        this.newTitleOfFile = tag + ".txt";
+                        File file = new File(this.directoryDestination + "\\" + this.newTitleOfFile);
+                        file.createNewFile();
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
                     }
-                    this.newTitleOfFile = tag + ".txt";
-                    File file = new File(this.directoryDestination + "\\" + this.newTitleOfFile);
-                    file.createNewFile();
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
             }
-        }
 
-        this.databaseAdd.save(this);
-        (new JsonExport()).export(this);
-        this.clearAddFile();
-        this.AvailabilityElec.selectedProperty().setValue(true);
-        this.eventListenerAvailability(new ActionEvent());
+            this.databaseAdd.save(this);
+            (new JsonExport()).export(this);
+            this.clearAddFile();
+            this.AvailabilityElec.selectedProperty().setValue(true);
+            this.eventListenerAvailability(new ActionEvent());
+        }
     }
 
     @FXML
     public void onUserWantToUpdateFile(ActionEvent actionEvent) {
-        String tag = (new TagFile()).getTag(this.inputAuthor.getValue(), this.addTheme, this.inputDate);
-        if (!SingletonFileSelected.getInstance().file.name.equals(this.titleOfImportFileAdd.getText())) {
-            try {
-                Files.delete(Paths.get(this.directoryDestination + "\\" + SingletonFileSelected.getInstance().file.getName()));
-            } catch (IOException e) {
-                System.out.println(e.getMessage());
-            }
-
-            String extension = this.titleOfImportFileAdd.getText().substring(this.titleOfImportFileAdd.getText().lastIndexOf(".") + 1);
-            SingletonFileSelected.getInstance().file.firstMap.put("name", this.titleOfImportFileAdd.getText());
-            try {
-                Stream<Path> walk = Files.walk(this.directoryDestination);
+        if (verifyInputFile() && verifyIfAddIsPossible()){
+            String tag = (new TagFile()).getTag(addAuthor, this.addTheme, this.inputDate);
+            if (!SingletonFileSelected.getInstance().file.name.equals(this.titleOfImportFileAdd.getText())) {
                 try {
-                    List<File> files = walk.filter(Files::isRegularFile).map(Path::toFile).collect(Collectors.toList());
-                    if (!files.isEmpty()) {
-                        int id = 0;
-                        for (File file : files){
-                            if (file.getName().equals(tag + "." + extension)) {
-                                ++id;
-                            }
-                        }
-                        if (id != 0) {
-                            tag = tag + "_" + id;
-                        }
-                    }
-                    this.newTitleOfFile = tag + "." + extension;
-                    File source = new File(this.filesAdd.get(0).getAbsolutePath());
-                    File dest = new File(this.directoryDestination + "\\" + tag + "." + extension);
-                    FileUtils.copyFile(source, dest);
+                    Files.delete(Paths.get(this.directoryDestination + "\\" + SingletonFileSelected.getInstance().file.getName()));
                 } catch (IOException e) {
                     System.out.println(e.getMessage());
                 }
-            } catch (IOException var24) {
-                System.out.println(var24.getMessage());
+
+                String extension = this.titleOfImportFileAdd.getText().substring(this.titleOfImportFileAdd.getText().lastIndexOf(".") + 1);
+                SingletonFileSelected.getInstance().file.firstMap.put("name", this.titleOfImportFileAdd.getText());
+                try {
+                    Stream<Path> walk = Files.walk(this.directoryDestination);
+                    try {
+                        List<File> files = walk.filter(Files::isRegularFile).map(Path::toFile).collect(Collectors.toList());
+                        if (!files.isEmpty()) {
+                            int id = 0;
+                            for (File file : files){
+                                if (file.getName().equals(tag + "." + extension)) {
+                                    ++id;
+                                }
+                            }
+                            if (id != 0) {
+                                tag = tag + "_" + id;
+                            }
+                        }
+                        this.newTitleOfFile = tag + "." + extension;
+                        File source = new File(this.filesAdd.get(0).getAbsolutePath());
+                        File dest = new File(this.directoryDestination + "\\" + tag + "." + extension);
+                        FileUtils.copyFile(source, dest);
+                    } catch (IOException e) {
+                        System.out.println(e.getMessage());
+                    }
+                } catch (IOException var24) {
+                    System.out.println(var24.getMessage());
+                }
+            } else {
+                this.newTitleOfFile = SingletonFileSelected.getInstance().file.name;
             }
-        } else {
-            this.newTitleOfFile = SingletonFileSelected.getInstance().file.name;
+
+            this.databaseAdd.save(this);
+            (new JsonExport()).edit(this);
+
+            try {
+                Parent root = FXMLLoader.load(ClassLoader.getSystemResource("xml/view.fxml"));
+                ControllerMenu.stageShow.setScene(new Scene(root));
+            } catch (IOException var19) {
+                var19.printStackTrace();
+            }
         }
+    }
 
-        this.databaseAdd.save(this);
-        (new JsonExport()).edit(this);
-
-        try {
-            Parent root = FXMLLoader.load(ClassLoader.getSystemResource("xml/view.fxml"));
-            ControllerMenu.stageShow.setScene(new Scene(root));
-        } catch (IOException var19) {
-            var19.printStackTrace();
+    private boolean verifyIfAddIsPossible(){
+        if (inputTitle.getText().isEmpty()){
+            Toast.makeText(ControllerMenu.stageAdd, "The title is missing !", 1000, 200, 100);
+            return false;
         }
+        else if (inputDate.getValue() == null){
+            Toast.makeText(ControllerMenu.stageAdd, "The date is missing !", 1000, 200, 100);
+            return false;
+        }
+        else if (confidential.getSelectionModel().isEmpty()){
+            Toast.makeText(ControllerMenu.stageAdd, "The confidentiality is missing !", 1000, 200, 100);
+            return false;
+        }
+        else if (read.getSelectionModel().isEmpty()){
+            Toast.makeText(ControllerMenu.stageAdd, "The read is missing !", 1000, 200, 100);
+            return false;
+        }
+        else if (addAuthor.isEmpty()){
+            Toast.makeText(ControllerMenu.stageAdd, "The author are missing !", 1000, 200, 100);
+            return false;
+        }
+        else if (addTheme.isEmpty()){
+            Toast.makeText(ControllerMenu.stageAdd, "The theme are missing !", 1000, 200, 100);
+            return false;
+        }
+        else if (inputTypeOfDocument.getSelectionModel().isEmpty()){
+            Toast.makeText(ControllerMenu.stageAdd, "The type of document is missing !", 1000, 200, 100);
+            return false;
+        }
+        else if (addTags.isEmpty()){
+            Toast.makeText(ControllerMenu.stageAdd, "The keyword are missing !", 1000, 200, 100);
+            return false;
+        }
+        return true;
+    }
 
+    private boolean verifyInputFile(){
+        if (AvailabilityElec.selectedProperty().getValue()) {
+            if (this.titleOfImportFileAdd.getText().isEmpty()) {
+                Toast.makeText(ControllerMenu.stageAdd, "The file is missing !", 1000, 200, 100);
+                return false;
+            } else {
+                return true;
+            }
+        }
+        else if (AvailabilityLib.selectedProperty().getValue() || AvailabilityPrint.selectedProperty().getValue()) {
+            return true;
+        }
+        return true;
     }
 
     private void clearAddFile() {
@@ -481,6 +570,7 @@ public class ControllerAddFile {
         this.inputNote.clear();
         this.inputQuote.clear();
         this.addTheme.clear();
+        this.addAuthor.clear();
         this.addTags.clear();
         this.AvailabilityPrint.selectedProperty().setValue(false);
         this.AvailabilityLib.selectedProperty().setValue(false);
@@ -510,4 +600,12 @@ public class ControllerAddFile {
             this.inputKeyWord.setValue("");
         }
     }
+
+    public void onEnterKeyPressAuthor(KeyEvent e) {
+        if (e.getCode() == KeyCode.ENTER && !((String)this.inputAuthor.getValue()).isEmpty() && !this.addAuthor.contains(this.inputAuthor.getValue())) {
+            this.addAuthor.add(this.inputAuthor.getValue());
+            this.inputAuthor.setValue("");
+        }
+    }
+
 }

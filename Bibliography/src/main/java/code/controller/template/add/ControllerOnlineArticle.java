@@ -34,30 +34,25 @@ import java.util.Map;
 public class ControllerOnlineArticle implements TemplateController {
 
     @FXML
-    public FlowPane showAff, showAuthor;
+    public FlowPane showAff;
 
     @FXML
-    public ComboBox<String> inputAff, inputAuthor;
+    public ComboBox<String> inputAff;
 
     @FXML
-    public TextField title, website;
+    public TextField website;
 
     @FXML
-    public DatePicker pubDate, accessDate;
+    public DatePicker accessDate;
 
     @FXML
     public TextArea comment;
 
-    public ObservableList<String> addAuthor = FXCollections.observableArrayList();
     public ObservableList<String> addAffiliation = FXCollections.observableArrayList();
 
     @FXML
     public void initialize() {
         SingletonController.getInstance().templateController = this;
-        this.addAuthor.addListener(this::eventListenerAddAuthor);
-        this.inputAuthor.getEditor().textProperty().addListener((obs, oldText, newText) -> {
-            this.inputAuthor.setValue(newText);
-        });
         this.addAffiliation.addListener(this::eventListenerAddAffiliation);
         this.inputAff.getEditor().textProperty().addListener((obs, oldText, newText) -> {
             this.inputAff.setValue(newText);
@@ -66,49 +61,18 @@ public class ControllerOnlineArticle implements TemplateController {
     }
 
     private void setComboBox() {
-        this.inputAuthor.getItems().addAll(SingletonDatabase.getInstance().getAllAuthor());
-        AutoIncrement autoAuthor = new AutoIncrement(this.inputAuthor);
-        this.inputAuthor.getEditor().setOnKeyPressed((ke) -> {
-            Platform.runLater(autoAuthor::show);
-        });
-
-        this.inputAff.getItems().addAll(SingletonDatabase.getInstance().getAllAuthor());
+        this.inputAff.getItems().addAll(SingletonDatabase.getInstance().getAllAffiliation());
         AutoIncrement autoAff = new AutoIncrement(this.inputAff);
         this.inputAff.getEditor().setOnKeyPressed((ke) -> {
             Platform.runLater(autoAff::show);
         });
     }
 
-    public void onEnterKeyPressAuthor(KeyEvent e) {
-        if (e.getCode() == KeyCode.ENTER && !((String)this.inputAuthor.getValue()).isEmpty() && !this.addAuthor.contains(this.inputAuthor.getValue())) {
-            this.addAuthor.add(this.inputAuthor.getValue());
-            this.inputAuthor.setValue("");
-        }
-    }
 
     public void onEnterKeyPressAffiliation(KeyEvent e) {
         if (e.getCode() == KeyCode.ENTER && !((String)this.inputAff.getValue()).isEmpty() && !this.addAffiliation.contains(this.inputAff.getValue())) {
             this.addAffiliation.add(this.inputAff.getValue());
             this.inputAff.setValue("");
-        }
-    }
-
-    private void eventListenerAddAuthor(ListChangeListener.Change<? extends String> change) {
-        while(change.next()) {
-            if (change.wasAdded()) {
-                Button btn = this.getButtonTag((String)this.addAuthor.get(this.addAuthor.size() - 1));
-                btn.setOnMouseClicked((event) -> {
-                    if (event.getClickCount() == 2) {
-                        this.addAuthor.remove(btn.getText());
-                    }
-
-                });
-                this.showAuthor.getChildren().add(btn);
-            }
-
-            if (change.wasRemoved()) {
-                this.showAuthor.getChildren().subList(change.getFrom(), change.getFrom() + change.getRemovedSize()).clear();
-            }
         }
     }
 
@@ -159,12 +123,6 @@ public class ControllerOnlineArticle implements TemplateController {
                     JSONObject objectTypeOfDocument = (JSONObject)object.get("objectOfTypeOfDocument");
                     objectTypeOfDocument.keySet().forEach(e -> {
                         switch (e.toString()){
-                            case "title":
-                                map.put("title", objectTypeOfDocument.get("title").toString());
-                                break;
-                            case "pubDate":
-                                map.put("pubDate", objectTypeOfDocument.get("pubDate").toString());
-                                break;
                             case "accessDate":
                                 map.put("accessDate", objectTypeOfDocument.get("accessDate").toString());
                                 break;
@@ -173,9 +131,6 @@ public class ControllerOnlineArticle implements TemplateController {
                                 break;
                             case "comment":
                                 map.put("comment", objectTypeOfDocument.get("comment").toString());
-                                break;
-                            case "author":
-                                map.put("author", objectTypeOfDocument.get("author").toString());
                                 break;
                             case "affiliation":
                                 map.put("affiliation", objectTypeOfDocument.get("affiliation").toString());
@@ -196,27 +151,14 @@ public class ControllerOnlineArticle implements TemplateController {
     @Override
     public JSONObject getJson() {
         JSONObject json = new JSONObject();
-        if (!this.title.getText().isEmpty()){
-            json.put("title", this.title.getText());
-        }
         if (this.accessDate.getValue() != null){
             json.put("accessDate", this.accessDate.getValue().toString());
-        }
-        if (this.pubDate.getValue() != null){
-            json.put("pubDate", this.pubDate.getValue().toString());
         }
         if (!this.comment.getText().isEmpty()){
             json.put("comment", this.comment.getText());
         }
         if (!this.website.getText().isEmpty()){
             json.put("website", this.website.getText());
-        }
-        if (!this.addAuthor.isEmpty()){
-            JSONArray jsonArray = new JSONArray();
-            jsonArray.addAll(this.addAuthor);
-            json.put("author", jsonArray);
-
-            new DatabaseAdd().saveAffiliation(addAuthor);
         }
         if (!this.addAffiliation.isEmpty()){
             JSONArray jsonArray = new JSONArray();
@@ -243,28 +185,11 @@ public class ControllerOnlineArticle implements TemplateController {
         final List[] result = new List[]{new ArrayList<>()};
         map.keySet().forEach(e ->{
             switch (e.toString()){
-                case "title":
-                    result[0].add("\nTitle : " + (String)map.get("title"));
-                    break;
-                case "pubDate":
-                    result[0].add("\nPublication date : " + (String)map.get("pubDate"));
-                    break;
                 case "accessDate":
                     result[0].add("\nAccess date : " + (String)map.get("accessDate"));
                     break;
                 case "website":
                     result[0].add("\nWebsite : " + (String)map.get("website"));
-                    break;
-                case "author":
-                    String list = ((String) SingletonFileSelected.getInstance().file.additionalMap.get("author")).replace("\"", "").replace("[", "").replace("]", "");
-                    String[] ary = list.split(",");
-                    String[] var4 = ary;
-                    int var5 = ary.length;
-                    result[0].add("Author : " + '\n');
-                    for(int var6 = 0; var6 < var5; ++var6) {
-                        String str = var4[var6];
-                        result[0].add(str + "\n");
-                    }
                     break;
                 case "affiliation":
                     String list2 = ((String) SingletonFileSelected.getInstance().file.additionalMap.get("affiliation")).replace("\"", "").replace("[", "").replace("]", "");
@@ -287,15 +212,14 @@ public class ControllerOnlineArticle implements TemplateController {
     }
 
     @Override
+    public String getStringToFormatBibTex() {
+        return null;
+    }
+
+    @Override
     public void showToEdit() {
         SingletonFileSelected.getInstance().file.additionalMap.keySet().forEach(e -> {
             switch (e.toString()){
-                case "title":
-                    this.title.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("title"));
-                    break;
-                case "pubDate":
-                    this.pubDate.setValue(LocalDate.parse(SingletonFileSelected.getInstance().file.additionalMap.get("pubDate")));
-                    break;
                 case "accessDate":
                     this.accessDate.setValue(LocalDate.parse(SingletonFileSelected.getInstance().file.additionalMap.get("accessDate")));
                     break;
@@ -304,13 +228,6 @@ public class ControllerOnlineArticle implements TemplateController {
                     break;
                 case "comment":
                     this.comment.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("comment"));
-                    break;
-                case "author":
-                    String list = ((String)SingletonFileSelected.getInstance().file.additionalMap.get("author")).replace("\"", "").replace("[", "").replace("]", "");
-                    String[] ary = list.split(",");
-                    for(int var5 = 0; var5 < ary.length; ++var5) {
-                        this.addAuthor.add(ary[var5]);
-                    }
                     break;
                 case "affiliation":
                     String list2 = ((String)SingletonFileSelected.getInstance().file.additionalMap.get("affiliation")).replace("\"", "").replace("[", "").replace("]", "");

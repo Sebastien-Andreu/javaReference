@@ -16,7 +16,7 @@ public class ControllerViewSoftwareManual {
     @FXML
     public TextArea comment;
     @FXML
-    public Label title, onlineRef;
+    public Label title, onlineRef, version;
 
     @FXML
     public FlowPane showAff;
@@ -30,6 +30,9 @@ public class ControllerViewSoftwareManual {
             switch (e.toString()){
                 case "title":
                     this.title.setText(SingletonController.getInstance().templateController.map.get("title"));
+                    break;
+                case "version":
+                    this.version.setText(SingletonController.getInstance().templateController.map.get("version"));
                     break;
                 case "onlineRef":
                     this.onlineRef.setText(SingletonController.getInstance().templateController.map.get("onlineRef"));

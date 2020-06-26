@@ -45,6 +45,7 @@ public class ControllerBook implements TemplateController {
         SingletonController.getInstance().templateController = this;
     }
 
+    @Override
     public Map<String, String> getData() {
         JSONParser parser = new JSONParser();
         map.clear();
@@ -99,6 +100,7 @@ public class ControllerBook implements TemplateController {
         }
     }
 
+    @Override
     public JSONObject getJson() {
         JSONObject json = new JSONObject();
         if (!this.editor.getText().isEmpty()){
@@ -128,6 +130,7 @@ public class ControllerBook implements TemplateController {
         return json;
     }
 
+    @Override
     public AnchorPane loadView() {
         try {
             return (AnchorPane)FXMLLoader.load(ClassLoader.getSystemResource("xml/template/view/view_textbook.fxml"));
@@ -137,6 +140,7 @@ public class ControllerBook implements TemplateController {
         }
     }
 
+    @Override
     public String getStringToExtract() {
         final List[] result = new List[]{new ArrayList<>()};
         map.keySet().forEach(e ->{
@@ -169,6 +173,11 @@ public class ControllerBook implements TemplateController {
             }
         });
         return result[0].toString().replace(",","").replace("[", "").replace("]", "");
+    }
+
+    @Override
+    public String getStringToFormatBibTex() {
+        return null;
     }
 
     public void showToEdit() {

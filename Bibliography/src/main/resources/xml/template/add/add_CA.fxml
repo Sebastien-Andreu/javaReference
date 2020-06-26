@@ -14,7 +14,7 @@
       <Label layoutX="29.0" layoutY="106.0" prefHeight="17.0" prefWidth="70.0" text="Paper code :" />
       <TextField fx:id="code" layoutX="102.0" layoutY="102.0" prefHeight="25.0" prefWidth="283.0" />
       <Label layoutX="29.0" layoutY="136.0" prefHeight="17.0" prefWidth="70.0" text="Online ref :" />
-      <TextField fx:id="ref" layoutX="102.0" layoutY="132.0" prefHeight="25.0" prefWidth="283.0" />
+      <TextField fx:id="onlineRef" layoutX="102.0" layoutY="132.0" prefHeight="25.0" prefWidth="283.0" />
        <Label layoutX="453.0" layoutY="18.0" text="Affiliation :" />
        <ComboBox fx:id="inputAff" editable="true" layoutX="523.0" layoutY="14.0" maxWidth="-Infinity" minHeight="-Infinity" onKeyPressed="#onEnterKeyPressAffiliation" prefHeight="25.0" prefWidth="380.0" styleClass="combo-box" />
        <ScrollPane cache="true" layoutX="451.0" layoutY="46.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="451.0">

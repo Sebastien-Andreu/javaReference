@@ -1,13 +1,14 @@
 package code.controller.template.add;
 
-import code.database.Database;
 import code.database.DatabaseAdd;
 import code.singleton.SingletonController;
 import code.singleton.SingletonDatabase;
 import code.singleton.SingletonFileSelected;
+import code.utils.BibTexFormat;
 import code.utils.AutoIncrement;
 import java.io.FileReader;
 import java.io.IOException;
+import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.Iterator;
 import java.util.List;
@@ -18,11 +19,7 @@ import javafx.collections.ObservableList;
 import javafx.collections.ListChangeListener.Change;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
-import javafx.scene.control.Button;
-import javafx.scene.control.ComboBox;
-import javafx.scene.control.ContentDisplay;
-import javafx.scene.control.TextArea;
-import javafx.scene.control.TextField;
+import javafx.scene.control.*;
 import javafx.scene.image.Image;
 import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyCode;
@@ -44,13 +41,14 @@ public class ControllerCA implements TemplateController {
     @FXML
     public TextField code;
     @FXML
-    public TextField ref;
+    public TextField onlineRef;
     @FXML
     public ComboBox<String> inputAff;
     @FXML
     public FlowPane showAff;
     @FXML
     public TextArea comment;
+
     public ObservableList<String> addAffiliation = FXCollections.observableArrayList();
 
     public ControllerCA() {
@@ -67,7 +65,7 @@ public class ControllerCA implements TemplateController {
     }
 
     private void setComboBox() {
-        this.inputAff.getItems().addAll(SingletonDatabase.getInstance().getAllAuthor());
+        this.inputAff.getItems().addAll(SingletonDatabase.getInstance().getAllAffiliation());
         AutoIncrement autoIAffiliation = new AutoIncrement(this.inputAff);
         this.inputAff.getEditor().setOnKeyPressed((ke) -> {
             Platform.runLater(autoIAffiliation::show);
@@ -110,6 +108,7 @@ public class ControllerCA implements TemplateController {
         return result;
     }
 
+    @Override
     public Map<String, String> getData() {
         JSONParser parser = new JSONParser();
         map.clear();
@@ -160,6 +159,7 @@ public class ControllerCA implements TemplateController {
         }
     }
 
+    @Override
     public JSONObject getJson() {
         JSONObject json = new JSONObject();
         if (!this.name.getText().isEmpty()){
@@ -173,6 +173,9 @@ public class ControllerCA implements TemplateController {
         }
         if (!this.code.getText().isEmpty()){
             json.put("paperCode", this.code.getText());
+        }
+        if (!this.onlineRef.getText().isEmpty()){
+            json.put("onlineRef", this.onlineRef.getText());
         }
         if (!this.comment.getText().isEmpty()){
             json.put("comment", this.comment.getText());
@@ -190,6 +193,7 @@ public class ControllerCA implements TemplateController {
         return json;
     }
 
+    @Override
     public AnchorPane loadView() {
         try {
             return (AnchorPane)FXMLLoader.load(ClassLoader.getSystemResource("xml/template/view/view_CA.fxml"));
@@ -199,6 +203,7 @@ public class ControllerCA implements TemplateController {
         }
     }
 
+    @Override
     public String getStringToExtract() {
         final List[] result = new List[]{new ArrayList<>()};
         map.keySet().forEach(e ->{
@@ -218,19 +223,22 @@ public class ControllerCA implements TemplateController {
                 case "onlineRef":
                     result[0].add("\nOnline reference : " + (String)map.get("onlineRef"));
                     break;
+                case "code":
+                    result[0].add("\ncode : " + (String)map.get("code"));
+                    break;
                 case "affiliation":
-                    String list = ((String)SingletonFileSelected.getInstance().file.additionalMap.get("affiliation")).replace("\"", "").replace("[", "").replace("]", "");
-                    String[] ary = list.split(",");
-                    String[] var4 = ary;
-                    int var5 = ary.length;
+                    String list2 = ((String) SingletonFileSelected.getInstance().file.additionalMap.get("affiliation")).replace("\"", "").replace("[", "").replace("]", "");
+                    String[] ary2 = list2.split(",");
+                    String[] var42 = ary2;
+                    int var52 = ary2.length;
                     result[0].add("Affiliation : " + '\n');
-                    for(int var6 = 0; var6 < var5; ++var6) {
-                        String str = var4[var6];
+                    for(int var6 = 0; var6 < var52; ++var6) {
+                        String str = var42[var6];
                         result[0].add(str + "\n");
                     }
                     break;
                 case "comment":
-                    result[0].add("\nComment : \n" + (String)map.get("comment") + "\n");
+                    result[0].add("\nComment : " + (String)map.get("comment"));
                     break;
 
             }
@@ -238,6 +246,29 @@ public class ControllerCA implements TemplateController {
         return result[0].toString().replace(",","").replace("[", "").replace("]", "");
     }
 
+    @Override
+    public String getStringToFormatBibTex(){
+        final List[] result = new List[]{new ArrayList<>()};
+
+        result[0].add("@inproceedings{" + SingletonFileSelected.getInstance().file.firstMap.get("tag"));
+        result[0].add("\n TITLE = {" + SingletonFileSelected.getInstance().file.firstMap.get("title") + "}");
+
+        LocalDate date = LocalDate.parse(SingletonFileSelected.getInstance().file.firstMap.get("date"));
+
+        if (map.containsKey("confName")){
+            result[0].add("\n BOOKTITLE = {Proc. of the " + date.getYear() + " " + map.get("confName")+ "}");
+        } else {
+            result[0].add("\n BOOKTITLE = {Proc. of the " + date.getYear() + " CONFERENCE NAME MISSING !!!!!!!!}");
+        }
+
+        result[0].add("\n AUTHOR = {" + BibTexFormat.getAuthor() + "}");
+        result[0].add("\n YEAR = {" + date.getYear() + "}");
+
+        String str =  result[0].toString().replace("[", "").replace("]", "");
+        return str + "\n}";
+    }
+
+    @Override
     public void showToEdit() {
         SingletonFileSelected.getInstance().file.additionalMap.keySet().forEach(e -> {
             switch (e.toString()){
@@ -254,7 +285,7 @@ public class ControllerCA implements TemplateController {
                     this.code.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("paperCode"));
                     break;
                 case "onlineRef":
-                    this.ref.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("onlineRef"));
+                    this.onlineRef.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("onlineRef"));
                     break;
                 case "comment":
                     this.comment.setText((String)SingletonFileSelected.getInstance().file.additionalMap.get("comment"));

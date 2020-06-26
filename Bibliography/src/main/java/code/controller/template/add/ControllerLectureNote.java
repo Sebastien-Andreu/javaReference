@@ -131,6 +131,11 @@ public class ControllerLectureNote implements TemplateController{
         return result[0].toString().replace(",","").replace("[", "").replace("]", "");
     }
 
+    @Override
+    public String getStringToFormatBibTex() {
+        return null;
+    }
+
     public void showToEdit() {
         SingletonFileSelected.getInstance().file.additionalMap.keySet().forEach(e -> {
             switch (e.toString()){

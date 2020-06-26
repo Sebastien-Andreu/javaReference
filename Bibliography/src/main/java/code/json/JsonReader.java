@@ -25,6 +25,7 @@ public class JsonReader {
             for (Object jsonObject : json){
                 JSONObject j = (JSONObject)jsonObject;
                 if (j.get("tag").equals(name)) {
+                    map.put("tag", j.get("tag").toString());
                     j.keySet().forEach(e -> {
                         switch (e.toString()){
                             case "name":
@@ -48,8 +49,8 @@ public class JsonReader {
                             case "title":
                                 map.put("title", object.get("title").toString());
                                 break;
-                            case "Author":
-                                map.put("Author", object.get("Author").toString());
+                            case "author":
+                                map.put("author", object.get("author").toString());
                                 break;
                             case "theme":
                                 map.put("theme", object.get("theme").toString());
@@ -65,6 +66,12 @@ public class JsonReader {
                                 break;
                             case "date":
                                 map.put("date", object.get("date").toString());
+                                break;
+                            case "confidential":
+                                map.put("confidential", object.get("confidential").toString());
+                                break;
+                            case "read":
+                                map.put("read", object.get("read").toString());
                                 break;
                         }
                     });

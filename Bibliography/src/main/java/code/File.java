@@ -2,6 +2,8 @@ package code;
 
 import code.controller.ControllerMenu;
 import code.controller.ControllerView;
+import code.controller.template.add.ControllerCA;
+import code.controller.template.add.ControllerJournalArticle;
 import code.database.DatabaseView;
 import code.json.JsonReader;
 import code.singleton.SingletonController;
@@ -14,6 +16,7 @@ import java.io.ObjectOutputStream;
 import java.io.PrintWriter;
 import java.io.Serializable;
 import java.nio.file.Path;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.Base64;
 import java.util.Iterator;
@@ -51,12 +54,13 @@ public class File implements Serializable {
     public String name;
     public String container;
     public String title;
-    public String author;
     public String date;
     public String theme;
     public String typeOfDocument;
     public String extension;
     public List<String> tags = new ArrayList();
+    public List<String> author = new ArrayList();
+
     public Map<String, String> additionalMap = null;
     public Map<String, String> firstMap = null;
 
@@ -163,10 +167,12 @@ public class File implements Serializable {
 
         this.controller.detailsName.setText(this.firstMap.get("name"));
         this.controller.detailsTitle.setText(this.firstMap.get("title"));
-        this.controller.detailsAuthor.setText(this.firstMap.get("Author"));
+        this.controller.detailsAuthor.setText(this.firstMap.get("author").replace("[", "").replace("]", "").replace("\"", "").replace(",", ", "));
         this.controller.detailsDate.setText(this.firstMap.get("date"));
         this.controller.detailsTheme.setText(this.firstMap.get("theme").replace("[", "").replace("]", "").replace("\"", "").replace(",", ", "));
         this.controller.detailsTypeOfDocument.setText(this.firstMap.get("typeOfDocument"));
+        this.controller.confidential.setText(this.firstMap.get("confidential"));
+        this.controller.read.setText(this.firstMap.get("read"));
         this.controller.showNote.setText(this.firstMap.get("note"));
         this.controller.showQuote.setText(this.firstMap.get("quote"));
         AnchorPane pane = SingletonController.getInstance().templateController.loadView();
@@ -207,46 +213,43 @@ public class File implements Serializable {
 
     public void extractMetadata(Path path) {
         this.databaseView.setDetailsOfFile(this);
-
         try {
             PrintWriter writer = new PrintWriter(new FileWriter(String.valueOf(path), true));
-
             try {
-                writer.println("Title : " + this.title);
-                writer.println("Author : " + this.author);
-                writer.println("Date : " + this.date);
-                writer.println("Theme : " + this.theme);
-                writer.println("Type of document : " + this.typeOfDocument);
-                writer.println("Extension : " + this.extension);
-                writer.println("");
-                writer.println("");
-                writer.write(SingletonController.getInstance().templateController.getStringToExtract());
-                writer.println("");
-                writer.println("");
-                writer.println("Key word :\t");
-                String[] ary = this.firstMap.get("keyWord").replace("\"", "").replace("[", "").replace("]", "").split(",");
+                    writer.println("Title : " + this.title);
+                    writer.println("Author : " + this.author.toString().replace("[", "").replace("]", ""));
+                    writer.println("Date : " + this.date);
+                    writer.println("Theme : " + this.theme);
+                    writer.println("Type of document : " + this.typeOfDocument);
+                    writer.println("Extension : " + this.extension);
+                    writer.println("");
+                    writer.println("");
+                    writer.write(SingletonController.getInstance().templateController.getStringToExtract());
+                    writer.println("");
+                    writer.println("");
+                    writer.println("Key word :\t");
+                    String[] ary = this.firstMap.get("keyWord").replace("\"", "").replace("[", "").replace("]", "").split(",");
 
-                for(String str : ary) {
-                    writer.write("\t" + str);
-                }
+                    for (String str : ary) {
+                        writer.write("\t" + str);
+                    }
 
-                writer.println("");
-                writer.println("");
+                    writer.println("");
+                    writer.println("");
 
-                if (!this.firstMap.get("note").equals("")){
-                    writer.println("Note :");
-                    writer.println(this.firstMap.get("note"));
-                    writer.println("");
-                    writer.println("");
-                }
-                if (!this.firstMap.get("quote").equals("")){
-                    writer.println("Quote :");
-                    writer.println(this.firstMap.get("quote"));
-                    writer.println("");
-                    writer.println("");
-                    writer.println("");
-                }
-
+                    if (!this.firstMap.get("note").equals("")) {
+                        writer.println("Note :");
+                        writer.println(this.firstMap.get("note"));
+                        writer.println("");
+                        writer.println("");
+                    }
+                    if (!this.firstMap.get("quote").equals("")) {
+                        writer.println("Quote :");
+                        writer.println(this.firstMap.get("quote"));
+                        writer.println("");
+                        writer.println("");
+                        writer.println("");
+                    }
                 writer.println("-----------------------------------------------------------------------------------------------------------------------");
                 writer.println("");
                 writer.println("");
@@ -258,7 +261,29 @@ public class File implements Serializable {
         } catch (Exception var18) {
             System.out.println(var18.getMessage());
         }
+    }
 
+    public void extractMetaDateBebTexFormatIfIsPossible(java.io.File directory){
+        if (SingletonController.getInstance().templateController.getStringToFormatBibTex() != null){
+            Path metadataBibTex = Paths.get(directory.getAbsolutePath() + "\\metadataBibTexFormat.txt");
+            try {
+                PrintWriter writer = new PrintWriter(new FileWriter(String.valueOf(metadataBibTex), true));
+                try {
+                    writer.write(SingletonController.getInstance().templateController.getStringToFormatBibTex());
+                    writer.println("");
+                    writer.println("");
+                    writer.println("-----------------------------------------------------------------------------------------------------------------------");
+                    writer.println("");
+                    writer.println("");
+                } catch (Exception e) {
+                    System.out.println(e.getMessage());
+                } finally {
+                    writer.close();
+                }
+            } catch (Exception var18) {
+                System.out.println(var18.getMessage());
+            }
+        }
     }
 
     public FlowPane getFlowPane() {

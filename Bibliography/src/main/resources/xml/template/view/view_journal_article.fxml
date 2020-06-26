@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<AnchorPane maxHeight="-Infinity" maxWidth="-Infinity" minHeight="-Infinity" minWidth="-Infinity" prefHeight="533.0" prefWidth="564.0" xmlns="http://javafx.com/javafx/10.0.2-internal" xmlns:fx="http://javafx.com/fxml/1" fx:controller="code.controller.template.view.ControllerViewJournalArticle">
+    <children>
+        <Label fx:id="showLabelAuthor" layoutX="7.0" layoutY="263.0" text="Affiliation :" />
+        <ScrollPane cache="true" layoutX="8.0" layoutY="283.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="113.0" prefWidth="554.0">
+            <content>
+                <FlowPane fx:id="showAff" cache="true" hgap="5.0" nodeOrientation="LEFT_TO_RIGHT" prefHeight="109.0" prefWidth="547.0" rowValignment="TOP" vgap="5.0" />
+            </content>
+        </ScrollPane>
+        <Label fx:id="showOrg" layoutX="17.0" layoutY="10.0" prefHeight="17.0" prefWidth="34.0" style="-fx-font-weight: bold;" text="DOI :" />
+        <Label fx:id="showPlace" layoutX="17.0" layoutY="39.0" prefHeight="17.0" prefWidth="86.0" style="-fx-font-weight: bold;" text="Journal title :" />
+        <Label fx:id="showCode" layoutX="17.0" layoutY="69.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Journal volume :" />
+        <Label fx:id="showRef" layoutX="17.0" layoutY="99.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Journal number :" />
+        <TextArea fx:id="comment" editable="false" layoutX="8.0" layoutY="417.0" prefHeight="113.0" prefWidth="554.0" style="-fx-faint-focus-color: transparent;-fx-focus-color:lightgrey;" wrapText="true" />
+        <Label fx:id="showLabelComment" layoutX="7.0" layoutY="396.0" text="Comment :" />
+        <Label fx:id="DOI" layoutX="59.0" layoutY="10.0" prefHeight="17.0" prefWidth="432.0" text="" />
+        <Label fx:id="journalTitle" layoutX="101.0" layoutY="39.0" prefHeight="17.0" prefWidth="416.0" text="" />
+        <Label fx:id="journalVol" layoutX="122.0" layoutY="69.0" prefHeight="17.0" prefWidth="376.0" text="" />
+        <Label fx:id="journalNumber" layoutX="127.0" layoutY="99.0" prefHeight="17.0" prefWidth="376.0" text="" />
+      <Label fx:id="showCode1" layoutX="17.0" layoutY="186.0" prefHeight="17.0" prefWidth="102.0" style="-fx-font-weight: bold;" text="Online reference :" />
+      <Label fx:id="onlineRef" layoutX="120.0" layoutY="186.0" prefHeight="17.0" prefWidth="390.0" text="" />
+      <Label fx:id="showRef1" layoutX="17.0" layoutY="127.0" prefHeight="17.0" prefWidth="43.0" style="-fx-font-weight: bold;" text="Page :" />
+      <Label fx:id="page" layoutX="62.0" layoutY="127.0" prefHeight="17.0" prefWidth="441.0" text="" />
+      <Label fx:id="showRef11" layoutX="17.0" layoutY="156.0" prefHeight="17.0" prefWidth="71.0" style="-fx-font-weight: bold;" text="Publisher :" />
+      <Label fx:id="pub" layoutX="87.0" layoutY="156.0" prefHeight="17.0" prefWidth="416.0" text="" />
+    </children>
+</AnchorPane>
